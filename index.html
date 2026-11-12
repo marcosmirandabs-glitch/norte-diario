@@ -205,9 +205,10 @@ dialog h3{margin:0 0 12px}
 .hf button.on,.seg2 button.on{background:var(--accent);color:var(--onacc)}
 .seg2{display:flex;gap:6px;margin-top:6px}
 /* computador: duas colunas e anotações mais espaçosas */
-@media (min-width:980px){
-  body{padding-top:28px}
-  .app{max-width:960px;display:block;column-count:2;column-gap:16px}
+@media (min-width:760px){
+  body{padding:24px 24px 90px;display:block}
+  .app{max-width:none;width:100%;display:block;column-width:410px;column-gap:18px}
+  .hero svg{aspect-ratio:400/200}
   .app>.card{break-inside:avoid;margin-bottom:16px}
   .app>.foot{column-span:all}
   #noteTxt{min-height:240px}
