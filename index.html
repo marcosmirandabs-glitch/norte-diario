@@ -205,14 +205,33 @@ dialog h3{margin:0 0 12px}
 .hf button.on,.seg2 button.on{background:var(--accent);color:var(--onacc)}
 .seg2{display:flex;gap:6px;margin-top:6px}
 /* computador: duas colunas e anotações mais espaçosas */
+.col{display:contents}
 @media (min-width:760px){
-  body{padding:24px 24px 90px;display:block}
-  .app{max-width:none;width:100%;display:block;column-width:410px;column-gap:18px}
-  .hero svg{aspect-ratio:400/200}
-  .app>.card{break-inside:avoid;margin-bottom:16px}
-  .app>.foot{column-span:all}
+  body{padding:20px 20px 90px;display:block}
+  .app{max-width:none;width:100%;min-height:calc(100vh - 40px);display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:0;
+    background:var(--card);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+  .col{display:flex;flex-direction:column;min-width:0}
+  .col+.col{border-left:1px solid var(--line)}
+  .app .card{background:transparent;box-shadow:none;border-radius:0;border-bottom:1px solid var(--line)}
+  .col>.card:last-child{border-bottom:0}
+  .c2 #notesCard{order:-1}
+  .hero{margin:0 20px;border-radius:22px;overflow:hidden}
   #noteTxt{min-height:240px}
   #reflTxt{min-height:120px}
+  .app>.foot{grid-column:1/-1;border-top:1px solid var(--line);margin:0;padding:14px}
+  /* largura média: a 3ª coluna vira uma faixa embaixo */
+  .c3{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr}
+  .c3>.card{border-bottom:0}
+  .c3>.card:nth-child(even){border-left:1px solid var(--line)}
+  .c3>.card:nth-child(n+3){border-top:1px solid var(--line)}
+}
+@media (min-width:1100px){
+  .app{grid-template-columns:1.1fr 1.15fr .9fr}
+  .c3{grid-column:auto;display:flex;flex-direction:column;border-top:0;border-left:1px solid var(--line)}
+  .c3>.card{border-bottom:1px solid var(--line)}
+  .c3>.card:nth-child(even){border-left:0}
+  .c3>.card:nth-child(n+3){border-top:0}
+  .c3>.card:last-child{border-bottom:0}
 }
 @media (prefers-reduced-motion:reduce){.fade,.pop{animation:none}.btn:active{transform:none}.bar i{transition:none}}
 </style>
@@ -220,6 +239,7 @@ dialog h3{margin:0 0 12px}
 <body>
 <main class="app">
 
+  <div class="col c1">
   <!-- ===== Cartão principal ===== -->
   <section class="card">
     <div class="top">
@@ -294,6 +314,8 @@ dialog h3{margin:0 0 12px}
     <div class="streak"><span id="streak">0</span><small>dias seguidos</small></div>
   </section>
 
+  </div>
+  <div class="col c2">
   <!-- ===== Metas ===== -->
   <section class="card pad" id="goalsCard">
     <div class="row"><h3>🎯 Minhas metas</h3><button class="btn sm primary" id="goalAdd" style="flex:none">＋ Nova</button></div>
@@ -334,6 +356,8 @@ dialog h3{margin:0 0 12px}
     </details>
   </section>
 
+  </div>
+  <div class="col c3">
   <!-- ===== Calendário ===== -->
   <section class="card cal">
     <div class="cal-h">
@@ -372,6 +396,7 @@ dialog h3{margin:0 0 12px}
     </details>
   </section>
 
+  </div>
   <p class="foot">Norte Diário · uma frase por dia, um passo de cada vez</p>
 </main>
 
