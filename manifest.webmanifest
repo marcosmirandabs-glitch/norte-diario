@@ -1,0 +1,16 @@
+{
+  "name": "Norte Diário",
+  "short_name": "Norte",
+  "description": "Uma frase por dia, um passo de cada vez rumo à sua evolução.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e8f1f2",
+  "theme_color": "#2f6b7a",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,1138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2f6b7a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Norte">
+<title>Norte Diário</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg1:#e8f1f2;--bg2:#fdf3e7;--card:#ffffff;--ink:#16303a;--muted:#5d7580;
+  --line:#e3ecee;--accent:#2f6b7a;--accent2:#f4a261;--chip:#eef5f6;--ok:#2a9d8f;--onacc:#fff;
+  --shadow:0 18px 50px rgba(22,48,58,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg1:#0e1a20;--bg2:#1a1f2b;--card:#16242c;--ink:#eaf3f5;--muted:#93aab3;
+    --line:#233540;--accent:#7fc8d8;--accent2:#f4a261;--chip:#1d303a;--ok:#5fd0c2;--onacc:#0e1a20;
+    --shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --bg1:#0e1a20;--bg2:#1a1f2b;--card:#16242c;--ink:#eaf3f5;--muted:#93aab3;
+  --line:#233540;--accent:#7fc8d8;--accent2:#f4a261;--chip:#1d303a;--ok:#5fd0c2;--onacc:#0e1a20;
+  --shadow:0 18px 50px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  min-height:100vh;min-height:100dvh;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;
+  color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  display:flex;justify-content:center;padding:16px 16px calc(80px + env(safe-area-inset-bottom));
+}
+.app{width:100%;max-width:440px;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);overflow:hidden}
+.pad{padding:18px 20px}
+.pad h3{margin:0;font-size:1rem}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.row.wrap{flex-wrap:wrap;justify-content:flex-start}
+.hint{font-size:.78rem;color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+button[hidden]{display:none!important}
+
+/* topo */
+.top{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px 14px;gap:12px}
+.hello{font-size:.85rem;color:var(--muted);margin:0 0 2px}
+.dow{font-size:1.55rem;font-weight:700;text-transform:capitalize;margin:0;line-height:1.1}
+.date{font-size:.9rem;color:var(--muted);margin:3px 0 0}
+.wx{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.wx-main{display:flex;align-items:center;gap:6px;font-size:1.9rem;font-weight:700;line-height:1}
+.wx-ico{font-size:1.7rem}
+.wx-sub{font-size:.75rem;color:var(--muted);margin-top:4px}
+.city{margin-top:6px;font-size:.78rem;background:var(--chip);padding:5px 10px;border-radius:99px;color:var(--accent);font-weight:600}
+
+/* ilustração */
+.hero{position:relative;line-height:0;cursor:pointer;-webkit-user-select:none;user-select:none}
+.hero svg{width:100%;height:auto;display:block;aspect-ratio:400/220}
+.tag{position:absolute;left:14px;top:14px;line-height:1;font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;background:rgba(255,255,255,.88);color:#16303a;padding:6px 10px;border-radius:99px}
+.surp{position:absolute;right:12px;bottom:12px;line-height:1;font-size:.7rem;font-weight:700;background:rgba(22,48,58,.65);color:#fff;padding:6px 10px;border-radius:99px;pointer-events:none}
+.pop{animation:pop .35s ease}
+@keyframes pop{50%{transform:scale(1.015)}}
+
+/* modo manhã/noite */
+.seg{display:flex;gap:6px;padding:14px 18px 0}
+.seg button{flex:1;height:38px;border-radius:12px;background:var(--chip);font-size:.85rem;font-weight:700;color:var(--muted)}
+.seg button.on{background:var(--accent);color:var(--onacc)}
+
+/* frase */
+.phrase{padding:14px 22px 6px}
+.quote{font-size:1.25rem;line-height:1.4;font-weight:600;margin:0;letter-spacing:-.01em;min-height:5.2em}
+.quote::before{content:"“";color:var(--accent2);font-size:1.6em;line-height:0;vertical-align:-.28em;margin-right:2px}
+.cite{font-size:.82rem;color:var(--accent);font-weight:600;margin:8px 0 0}
+.cite small{color:var(--muted);font-weight:500}
+.meta{font-size:.78rem;color:var(--muted);margin:8px 0 0}
+.actions{display:flex;gap:8px;padding:12px 18px 0;align-items:center}
+.actions.two{padding-bottom:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;min-width:44px;padding:0 14px;border-radius:14px;
+  background:var(--chip);font-weight:600;font-size:.9rem;color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--onacc);flex:1}
+.btn.sm{height:38px;font-size:.82rem;padding:0 12px}
+.btn.grow{flex:1}
+.btn:active{transform:scale(.97)}
+.btn.fav.on{background:#ffe3e3;color:#d62839}
+.btn.run{background:var(--accent2);color:#3b2308}
+.chips{display:flex;gap:8px;padding:10px 18px 18px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:8px 14px;border-radius:99px;background:var(--chip);font-size:.82rem;font-weight:600;color:var(--muted)}
+.chip.on{background:var(--accent2);color:#3b2308}
+
+/* micro desafio */
+.micro{display:flex;gap:14px;align-items:flex-start}
+.micro .ico{font-size:1.6rem;line-height:1}
+.micro p{margin:4px 0 10px;font-size:.95rem;line-height:1.4}
+.micro .row{justify-content:flex-start}
+.done-btn.on{background:var(--ok);color:#fff}
+
+/* hábito */
+.habit{display:flex;align-items:center;gap:14px;padding:16px 20px}
+.check{width:48px;height:48px;border-radius:16px;border:2px solid var(--line);display:grid;place-items:center;font-size:1.4rem;flex:none;color:transparent;background:var(--chip)}
+.check.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.habit h3{margin:0;font-size:.98rem}
+.habit p{margin:2px 0 0;font-size:.8rem;color:var(--muted)}
+.streak{margin-left:auto;text-align:center;font-weight:700;font-size:1.3rem;line-height:1}
+.streak small{display:block;font-size:.65rem;color:var(--muted);font-weight:600;margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+
+/* meta semanal */
+input[type=text],input[type=number],input[type=time],input[type=search],textarea{width:100%;border-radius:14px;border:2px solid var(--line);padding:10px 14px;font:inherit;font-size:16px;background:var(--bg1);color:var(--ink)}
+input[type=text],input[type=search]{height:46px}
+textarea{resize:vertical;line-height:1.45;margin-top:10px}
+.goal-row{display:flex;gap:8px;margin:10px 0}
+.goal-row input[type=number]{width:76px;text-align:center}
+.bar{height:14px;background:var(--chip);border-radius:99px;overflow:hidden;margin:12px 0 8px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--accent2));border-radius:99px;transition:width .4s}
+
+/* notas */
+.lbl{display:block;margin-top:14px;font-size:.85rem;font-weight:700;color:var(--accent)}
+.det{margin-top:12px;border-top:1px solid var(--line)}
+.det summary{display:flex;justify-content:space-between;cursor:pointer;font-weight:700;padding:12px 0;list-style:none;font-size:.92rem}
+.det summary::-webkit-details-marker{display:none}
+.hist{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:8px;max-height:300px;overflow:auto}
+.hist button{width:100%;text-align:left;background:var(--chip);border-radius:12px;padding:10px 12px}
+.hist b{display:block;font-size:.8rem;color:var(--accent)}
+.hist span{display:block;font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* calendário */
+.cal{padding:16px 16px 18px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-h h3{margin:0;font-size:1rem;text-transform:capitalize}
+.nav{width:40px;height:40px;border-radius:12px;background:var(--chip);color:var(--accent);font-size:1.1rem;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.wd{font-size:.68rem;color:var(--muted);font-weight:700;padding:4px 0}
+.d{position:relative;aspect-ratio:1;border-radius:12px;font-size:.88rem;font-weight:600;display:grid;place-items:center}
+.d:hover{background:var(--chip)}
+.d.today{box-shadow:inset 0 0 0 2px var(--accent2)}
+.d.sel{background:var(--accent);color:var(--onacc)}
+.d.done::after{content:"";position:absolute;bottom:5px;right:calc(50% - 8px);width:5px;height:5px;border-radius:50%;background:var(--ok)}
+.d.note::before{content:"";position:absolute;bottom:5px;left:calc(50% - 8px);width:5px;height:5px;border-radius:50%;background:var(--accent2)}
+.d.empty{pointer-events:none}
+.legend{display:flex;gap:14px;justify-content:center;font-size:.72rem;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+
+/* favoritas */
+.favbox{padding:4px 20px}
+.favbox summary{cursor:pointer;font-weight:700;padding:14px 0;list-style:none;display:flex;justify-content:space-between}
+.favbox summary::-webkit-details-marker{display:none}
+.favs{padding:0 0 16px;margin:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.favs li{background:var(--chip);border-radius:14px;padding:12px 14px;font-size:.9rem;line-height:1.4;display:flex;gap:10px;justify-content:space-between}
+.favs button{color:var(--muted);font-size:1.1rem}
+.empty-msg{color:var(--muted);font-size:.85rem}
+
+/* lembrete */
+.rem{display:flex;gap:8px;margin:12px 0 8px;align-items:center}
+.rem input[type=time]{width:130px;height:44px}
+
+/* modal */
+dialog{border:0;border-radius:22px;padding:20px;width:min(92vw,400px);background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(10,20,25,.55)}
+dialog h3{margin:0 0 12px}
+.res{list-style:none;margin:10px 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.res button{width:100%;text-align:left;padding:12px;border-radius:12px;background:var(--chip)}
+.res small{color:var(--muted)}
+.foot{text-align:center;font-size:.72rem;color:var(--muted);padding:2px 0 8px}
+.theme{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:44px;height:44px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);font-size:1.2rem}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%) translateY(20px);background:#16303a;color:#fff;padding:10px 16px;border-radius:99px;font-size:.85rem;opacity:0;transition:.25s;pointer-events:none;max-width:90vw;text-align:center;z-index:10}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.fade{animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* micro-desafio v2 */
+.pill{display:inline-flex;align-items:center;font-size:.7rem;font-weight:700;padding:4px 9px;border-radius:99px;background:var(--chip);color:var(--muted)}
+.pill.link{color:var(--accent);cursor:pointer}
+.pill.ok{background:var(--ok);color:#fff}
+.mc-body{display:flex;gap:14px;align-items:center;margin:14px 0}
+.ring{position:relative;width:68px;height:68px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .rb{stroke:var(--line)}
+.ring .rf{stroke:var(--accent2);stroke-linecap:round;stroke-dasharray:175.93;stroke-dashoffset:175.93;transition:stroke-dashoffset .5s linear}
+.ring .rf.ok{stroke:var(--ok)}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.mc-text b{font-size:1.02rem;display:block}
+.mc-text p{margin:4px 0 0;font-size:.88rem;line-height:1.4;color:var(--muted)}
+.btn.star.on{background:#fff3c4;color:#8a5a00}
+/* metas */
+.goals{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.goal{background:var(--chip);border-radius:18px;padding:14px}
+.g-h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.g-h b{font-size:.95rem;line-height:1.3}
+.g-h button{color:var(--muted);font-size:1rem}
+.g-m{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.goal .bar{background:var(--card);margin:10px 0 8px}
+.goals .hint{padding:2px 0}
+/* histórico */
+.hist b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist .hi{display:flex;gap:6px}
+.hist .hmain{flex:1;width:auto;min-width:0}
+.hist .hgoal{flex:none;width:44px;border-radius:12px;background:var(--chip)}
+.hf{display:flex;gap:6px;margin:0 0 10px}
+.hf button,.seg2 button{flex:1;height:36px;border-radius:10px;background:var(--chip);font-size:.78rem;font-weight:700;color:var(--muted)}
+.hf button.on,.seg2 button.on{background:var(--accent);color:var(--onacc)}
+.seg2{display:flex;gap:6px;margin-top:6px}
+/* computador: duas colunas e anotações mais espaçosas */
+@media (min-width:980px){
+  body{padding-top:28px}
+  .app{max-width:960px;display:block;column-count:2;column-gap:16px}
+  .app>.card{break-inside:avoid;margin-bottom:16px}
+  .app>.foot{column-span:all}
+  #noteTxt{min-height:240px}
+  #reflTxt{min-height:120px}
+}
+@media (prefers-reduced-motion:reduce){.fade,.pop{animation:none}.btn:active{transform:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main class="app">
+
+  <!-- ===== Cartão principal ===== -->
+  <section class="card">
+    <div class="top">
+      <div>
+        <p class="hello" id="hello">Olá</p>
+        <h1 class="dow" id="dow">—</h1>
+        <p class="date" id="date">—</p>
+      </div>
+      <div class="wx">
+        <div class="wx-main"><span class="wx-ico" id="wxIco">⛅</span><span id="wxTemp">--°</span></div>
+        <div class="wx-sub" id="wxSub">carregando clima…</div>
+        <button class="city" id="cityBtn" aria-label="Mudar cidade">📍 <span id="cityName">São Paulo</span></button>
+      </div>
+    </div>
+    <div class="hero" id="hero" role="button" tabindex="0" aria-label="Toque na ilustração para uma frase surpresa">
+      <div id="scene"></div><span class="tag" id="tag">Foco</span><span class="surp">🎲 toque: frase surpresa</span>
+    </div>
+    <div class="seg" role="tablist" aria-label="Momento do dia">
+      <button id="modeM" role="tab">☀️ Manhã · frase</button>
+      <button id="modeN" role="tab">🌙 Noite · reflexão</button>
+    </div>
+    <div class="phrase">
+      <p class="quote fade" id="quote"></p>
+      <p class="cite" id="cite" hidden></p>
+      <p class="meta" id="meta"></p>
+    </div>
+    <div class="actions">
+      <button class="btn" id="prev" aria-label="Dia anterior">←</button>
+      <button class="btn primary" id="more">✨ Outra frase</button>
+      <button class="btn" id="next" aria-label="Próximo dia">→</button>
+    </div>
+    <div class="actions two">
+      <button class="btn fav" id="fav" aria-label="Favoritar">♡</button>
+      <button class="btn" id="share" aria-label="Compartilhar texto" title="Compartilhar texto">💬</button>
+      <button class="btn" id="card" aria-label="Gerar cartão para stories" title="Cartão para stories">🖼️</button>
+      <button class="btn grow run" id="focus">▶ Foco 25 min</button>
+      <button class="btn" id="stopT" aria-label="Parar timer" hidden>■</button>
+    </div>
+    <div class="chips" id="chips" role="tablist" aria-label="Temas"></div>
+  </section>
+
+  <!-- ===== Micro-desafio ===== -->
+  <section class="card pad micro2">
+    <div class="row"><h3>⚡ Micro-desafio · 5 min</h3><span class="pill" id="microTag"></span></div>
+    <div class="mc-body">
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><circle class="rb" cx="32" cy="32" r="28"/><circle class="rf" id="ringF" cx="32" cy="32" r="28"/></svg>
+        <span id="ringT">5:00</span>
+      </div>
+      <div class="mc-text"><b id="microTit"></b><p id="microHint"></p></div>
+    </div>
+    <div class="row wrap">
+      <button class="btn sm run" id="microGo">▶ Iniciar 5 min</button>
+      <button class="btn sm done-btn" id="microDone">☐ Feito</button>
+      <button class="btn sm" id="microSwap">🔄 Trocar</button>
+    </div>
+    <div class="row wrap" style="margin-top:8px">
+      <button class="btn sm" id="microNote">📝 Anotar resultado</button>
+      <button class="btn sm" id="microGoal">🎯 Virar meta</button>
+    </div>
+    <p class="hint" id="microStats" style="margin:10px 0 0"></p>
+  </section>
+
+  <!-- ===== Hábito ===== -->
+
+  <section class="card habit">
+    <button class="check" id="check" aria-label="Marcar evolução do dia">✓</button>
+    <div>
+      <h3>Evoluí hoje</h3>
+      <p id="habitTxt">Aplique a frase em uma ação e marque.</p>
+    </div>
+    <div class="streak"><span id="streak">0</span><small>dias seguidos</small></div>
+  </section>
+
+  <!-- ===== Metas ===== -->
+  <section class="card pad" id="goalsCard">
+    <div class="row"><h3>🎯 Minhas metas</h3><button class="btn sm primary" id="goalAdd" style="flex:none">＋ Nova</button></div>
+    <p class="hint" style="margin:6px 0 0">Transforme uma reflexão ou um micro-desafio em meta, com prazo e barra de progresso.</p>
+    <ul class="goals" id="goalList"></ul>
+    <details class="det">
+      <summary><span>✅ Concluídas e encerradas</span><span id="goalOld">0</span></summary>
+      <ul class="goals" id="goalOldList"></ul>
+    </details>
+  </section>
+
+  <!-- ===== Anotações ===== -->
+
+  <section class="card pad" id="notesCard">
+    <div class="row"><h3>📝 Anotações do dia</h3><span class="hint" id="noteDate"></span></div>
+    <textarea id="noteTxt" rows="5" placeholder="O que você quer lembrar, decidir ou agradecer?"></textarea>
+    <label class="lbl" for="reflTxt" id="reflLbl">Reflexão da noite</label>
+    <textarea id="reflTxt" rows="3" placeholder="Sua resposta…"></textarea>
+    <div class="row wrap" style="margin-top:10px">
+      <button class="btn sm star" id="reflStar">☆ Guardar reflexão</button>
+      <button class="btn sm" id="reflGoal">🎯 Virar meta</button>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn primary" id="saveNote">💾 Salvar</button>
+      <span class="hint" id="saveInfo"></span>
+    </div>
+    <details class="det" id="histBox">
+      <summary><span>📖 Histórico e exportação</span><span id="histCount">0</span></summary>
+      <div class="hf" id="histF"><button data-f="all" class="on">Todas</button><button data-f="star">⭐ Reflexões guardadas</button></div>
+      <ul class="hist" id="hist"></ul>
+      <div class="row wrap">
+        <button class="btn sm" id="expTxt">⬇ Texto (.txt)</button>
+        <button class="btn sm" id="expJson">⬇ Backup (.json)</button>
+        <button class="btn sm" id="impBtn">⬆ Importar</button>
+        <input type="file" id="impFile" accept=".json,application/json" hidden>
+      </div>
+      <p class="hint">As anotações ficam salvas neste aparelho. Use o backup para levar para outro celular.</p>
+    </details>
+  </section>
+
+  <!-- ===== Calendário ===== -->
+  <section class="card cal">
+    <div class="cal-h">
+      <button class="nav" id="pm" aria-label="Mês anterior">‹</button>
+      <h3 id="monthTitle">—</h3>
+      <button class="nav" id="nm" aria-label="Próximo mês">›</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="legend"><span><i style="background:var(--ok)"></i>evolui</span><span><i style="background:var(--accent2)"></i>anotação</span></div>
+  </section>
+
+  <!-- ===== Lembrete ===== -->
+  <section class="card pad">
+    <h3>🔔 Lembrete diário</h3>
+    <p class="hint" style="margin:6px 0 0">Receba um aviso com a frase do dia. As notificações funcionam com o app aberto ou instalado; para um aviso garantido, adicione também ao calendário do celular.</p>
+    <div class="rem">
+      <input type="time" id="remTime" value="08:00" aria-label="Horário do lembrete">
+      <button class="btn grow" id="remBtn">Ativar</button>
+    </div>
+    <button class="btn sm" id="icsBtn">📅 Adicionar ao calendário (.ics)</button>
+    <p class="hint" id="remMsg" style="margin:8px 0 0"></p>
+  </section>
+
+  <!-- ===== Instalar ===== -->
+  <section class="card pad">
+    <h3>📲 Instalar o app</h3>
+    <p class="hint" style="margin:6px 0 0">No computador (Chrome ou Edge), use o ícone de instalar na barra de endereço ou o botão abaixo. No celular: “Adicionar à tela inicial”. Instalado, abre em janela própria, funciona offline e guarda suas anotações no aparelho (faça o backup .json de vez em quando).</p>
+    <button class="btn primary" id="installBtn" hidden style="margin-top:12px;width:100%">📲 Instalar agora</button>
+  </section>
+
+  <!-- ===== Favoritas ===== -->
+  <section class="card">
+    <details class="favbox">
+      <summary><span>♥ Minhas frases favoritas</span><span id="favCount">0</span></summary>
+      <ul class="favs" id="favList"></ul>
+    </details>
+  </section>
+
+  <p class="foot">Norte Diário · uma frase por dia, um passo de cada vez</p>
+</main>
+
+<button class="theme" id="theme" aria-label="Alternar tema">🌓</button>
+<div class="toast" id="toast" role="status"></div>
+
+<dialog id="goalDlg">
+  <h3>🎯 Nova meta</h3>
+  <p class="hint" id="gdFrom" style="margin:0 0 6px"></p>
+  <label class="lbl" for="gdText" style="margin-top:6px">O que você vai fazer?</label>
+  <input type="text" id="gdText" maxlength="90" placeholder="Ex.: Pedir feedback ao meu gestor" style="margin-top:6px">
+  <label class="lbl">Prazo</label>
+  <div class="seg2" id="gdPer"><button data-p="w" class="on">Esta semana</button><button data-p="m">Este mês</button><button data-p="o">Sem prazo</button></div>
+  <label class="lbl" for="gdN">Quantas vezes ou etapas?</label>
+  <input type="number" id="gdN" min="1" max="99" value="3" style="margin-top:6px">
+  <div class="row" style="margin-top:18px"><button class="btn" id="gdCancel">Cancelar</button><button class="btn primary" id="gdSave">Criar meta</button></div>
+</dialog>
+
+<dialog id="cityDlg">
+  <h3>Escolher cidade</h3>
+  <button class="btn primary" id="geoBtn" style="width:100%;margin-bottom:12px">📍 Usar minha localização</button>
+  <input type="search" id="cityInput" placeholder="Digite o nome da cidade" autocomplete="off">
+  <ul class="res" id="cityRes"></ul>
+  <button class="btn" id="closeDlg" style="width:100%">Fechar</button>
+</dialog>
+
+<script>
+/* =====================  CONTEÚDO  =====================
+   T carreira | P vida pessoal | M mente | G pessoas | Q citações (com autor e fonte)
+   Para adicionar frases: ["T","texto"]  ·  citações: ["Q","texto","Autor","Obra"]       */
+const CATS={T:"Carreira",P:"Vida pessoal",M:"Mente",G:"Pessoas",Q:"Citações"};
+const RAW=[
+["T","Competência é construída em dias comuns, repetindo o simples com atenção."],
+["T","Peça feedback sem medo: ele é o atalho mais honesto para evoluir."],
+["T","Entregar bem hoje vale mais do que prometer perfeito amanhã."],
+["T","Todo erro revisado vira experiência; todo erro escondido vira repetição."],
+["T","Seu cargo diz o que você faz. Sua atitude diz até onde você vai."],
+["T","Aprender uma coisa nova por dia transforma uma carreira em um ano."],
+["T","Foco não é fazer mais coisas, é escolher a coisa certa e ficar com ela."],
+["T","Quem domina o básico com consistência surpreende em qualquer nível."],
+["T","Pergunte “o que posso melhorar?” antes de perguntar “quem errou?”."],
+["T","Escolher três prioridades pela manhã já é meio caminho andado."],
+["T","Responsabilidade é agir quando ninguém pediu e ninguém está vendo."],
+["T","Uma boa pergunta hoje evita um grande retrabalho amanhã."],
+["T","Liderar começa por cuidar do próprio exemplo."],
+["T","Não espere se sentir pronto: comece, ajuste e cresça no caminho."],
+["T","Metas pequenas cumpridas constroem a confiança para metas grandes."],
+["T","Seu talento abre a porta; sua disciplina mantém você lá dentro."],
+["T","Reconhecer o que não sabe é o primeiro passo para ir além do que sabe."],
+["T","Trabalhar com propósito transforma tarefa em contribuição."],
+["T","Documentar o que aprendeu é ensinar o seu eu do futuro."],
+["T","Resultados duradouros nascem de processos simples e bem repetidos."],
+["P","Evoluir é comparar-se com quem você foi ontem, não com quem os outros parecem ser."],
+["P","Pequenos hábitos repetidos valem mais que grandes decisões esquecidas."],
+["P","Cuidar do corpo é cuidar da energia que sustenta todos os seus sonhos."],
+["P","Descansar também faz parte do progresso."],
+["P","O melhor momento para recomeçar é agora, com o que você tem."],
+["P","Disciplina é um ato de amor com o seu futuro."],
+["P","Dizer não ao que dispersa é dizer sim ao que importa."],
+["P","Cada dia é uma página em branco; escreva algo de que se orgulhe."],
+["P","Coragem não é ausência de medo, é dar o próximo passo mesmo com ele."],
+["P","Gratidão treina o olhar para enxergar o que já está dando certo."],
+["P","Você não precisa ser perfeito, precisa ser constante."],
+["P","Mudança real começa em decisões silenciosas que ninguém aplaude."],
+["P","Seja paciente: as raízes crescem antes das flores."],
+["P","O que você pratica todos os dias, você se torna."],
+["P","Errar é parte de tentar; ficar parado é a única forma de não aprender."],
+["P","Escolha hoje uma atitude pela qual seu eu do futuro vai agradecer."],
+["P","A calma é uma força: respire antes de responder."],
+["P","Dez páginas lidas por dia abrem um mundo de ideias em um ano."],
+["P","Celebre o progresso, mesmo o pequeno. Ele é o combustível do próximo passo."],
+["P","Sua rotina é o retrato das suas prioridades. Ajuste o que precisar."],
+["M","Sua mente é um jardim: o que você cultiva é o que floresce."],
+["M","Os pensamentos mudam quando você muda o que repete para si mesmo."],
+["M","Curiosidade é o combustível de uma vida em evolução."],
+["M","Todo problema é uma pergunta esperando por uma solução criativa."],
+["M","Silêncio e pausa também ensinam."],
+["M","Foque no que você controla; o resto, aprenda a soltar."],
+["M","Autoconhecimento é a ferramenta que melhora todas as outras."],
+["M","Hoje, troque “não consigo” por “ainda não aprendi”."],
+["M","Sua atenção é seu bem mais valioso; invista-a com cuidado."],
+["M","Emoções são mensageiras: ouça-as, mas não deixe que dirijam sozinhas."],
+["M","Uma mente flexível atravessa tempestades que as rígidas não suportam."],
+["M","Quem se permite aprender nunca fica velho por dentro."],
+["M","Clareza vem da ação: dê o primeiro passo e o mapa se desenha."],
+["G","Um abraço sincero lembra que ninguém evolui sozinho."],
+["G","Ouvir com atenção é a forma mais bonita de respeitar alguém."],
+["G","Um bom dia dito com sorriso pode mudar o dia de alguém, inclusive o seu."],
+["G","Crescemos mais rápido quando celebramos as conquistas dos outros."],
+["G","As pessoas lembram de como você as fez sentir; cuide dessa lembrança."],
+["G","Peça ajuda sem vergonha e ofereça ajuda sem esperar nada."],
+["G","Gentileza é uma competência que abre qualquer porta."],
+["G","Cercar-se de quem inspira é investir em quem você será."],
+["G","Cumprimente com os olhos, escute com o coração, responda com respeito."],
+["G","Equipes fortes são feitas de pessoas que se importam umas com as outras."],
+["G","Perdoar liberta; reconhecer um erro aproxima."],
+["G","Quem ensina aprende duas vezes."],
+/* Citações de autores reais (tradução livre para o português). Fonte indicada por obra/capítulo. */
+["Q","Uma vida não examinada não vale a pena ser vivida.","Sócrates, segundo Platão","Apologia, 38a"],
+["Q","A jornada de mil milhas começa com um único passo.","Lao-Tsé","Tao Te Ching, cap. 64"],
+["Q","Somos aquilo que fazemos repetidamente. A excelência, então, não é um ato, e sim um hábito.","Will Durant, resumindo Aristóteles","A História da Filosofia (1926)"],
+["Q","Não é porque as coisas são difíceis que não ousamos; é porque não ousamos que elas são difíceis.","Sêneca","Cartas a Lucílio, 104.26"],
+["Q","Não são as coisas que perturbam as pessoas, mas os julgamentos que elas fazem sobre as coisas.","Epicteto","Manual (Encheirídion), §5"],
+["Q","O que se coloca no caminho torna-se o caminho.","Marco Aurélio","Meditações, V.20"],
+["Q","A mente toma a cor dos pensamentos que você tem com mais frequência.","Marco Aurélio","Meditações, V.16"],
+["Q","Aprendi que a coragem não é a ausência do medo, mas o triunfo sobre ele.","Nelson Mandela","Longo Caminho para a Liberdade (1994)"],
+["Q","Ninguém educa ninguém, ninguém educa a si mesmo: os homens se educam entre si, mediatizados pelo mundo.","Paulo Freire","Pedagogia do Oprimido (1968)"],
+["Q","O que a vida quer da gente é coragem.","Guimarães Rosa","Grande Sertão: Veredas (1956)"],
+["Q","Tudo vale a pena se a alma não é pequena.","Fernando Pessoa","Mensagem (1934), “Mar Português”"],
+["Q","Quem tem um porquê para viver suporta quase qualquer como.","Friedrich Nietzsche","Crepúsculo dos Ídolos, Máximas e Flechas, 12"],
+["Q","Falhei repetidas vezes na minha vida. E é por isso que eu tenho sucesso.","Michael Jordan","Comercial “Failure”, Nike (1997)"]
+];
+
+/* Micro-desafios de 5 minutos (ligados ao tema da frase) */
+const MICRO={
+T:[
+["Defina suas 3 prioridades","Escreva 3 tarefas do dia e comece pela mais difícil, antes de abrir o e-mail."],
+["Peça um feedback rápido","Mande uma mensagem a um colega: “o que eu poderia melhorar naquela entrega?”"],
+["Aprenda com um erro","Anote um erro recente, a causa e uma mudança concreta que você fará."],
+["Faxina na lista de tarefas","Apague, delegue ou agende 5 itens que estão parados há dias."],
+["Resumo da semana","Escreva em 3 linhas o que você aprendeu esta semana no trabalho."],
+["Ajuda sem cobrar","Ofereça apoio objetivo a alguém da equipe, sem esperar retorno."],
+["Cinco minutos de foco total","Silencie as notificações e avance em uma única tarefa importante."],
+["Destrave um projeto","Escolha um projeto parado e escreva o próximo passo em uma frase."]],
+P:[
+["Corpo em movimento","Beba um copo d'água e alongue pescoço, ombros e costas."],
+["Três gratidões","Escreva 3 coisas boas de hoje e por que elas aconteceram."],
+["Caminhada sem tela","Caminhe sem celular e repare em 3 coisas ao redor."],
+["Um cantinho em ordem","Arrume só uma gaveta, mesa ou prateleira. Termine o que começar."],
+["Cinco minutos de leitura","Leia um trecho de um livro que você deixou de lado."],
+["Hábito em miniatura","Escolha um hábito e faça a versão de 2 minutos agora."],
+["Cuide do amanhã","Deixe pronto algo que facilite o dia seguinte: roupa, lista ou lanche."],
+["Intenção do dia","Respire fundo 10 vezes e complete: “hoje eu quero ser alguém que…”"]],
+M:[
+["Silêncio atento","Sente-se confortável, feche os olhos e observe os pensamentos sem julgar."],
+["Controla ou solta","Escreva uma preocupação e separe: o que depende de você e o que não depende."],
+["Reescreva o pensamento","Pegue um pensamento negativo de hoje e escreva uma versão mais justa."],
+["Perguntas curiosas","Anote 3 perguntas que você gostaria de responder nesta semana."],
+["Respiração 4-6","Inspire por 4 segundos e expire por 6, durante 5 minutos."],
+["Aprendizado relâmpago","Leia um artigo curto e resuma em uma frase o que mudou no seu olhar."],
+["Termômetro emocional","Descreva como se sente em uma palavra e escreva por quê."],
+["Prova de capacidade","Releia uma conquista antiga e anote o que ela mostra sobre você."]],
+G:[
+["Gratidão em mensagem","Envie um agradecimento sincero e específico a alguém."],
+["Cumprimento de verdade","Chame alguém pelo nome e pergunte como a pessoa está, ouvindo a resposta."],
+["Elogio específico","Reconheça com detalhes o trabalho de alguém próximo."],
+["Escuta total","Ouça alguém por 5 minutos sem interromper e sem olhar o celular."],
+["Retome um contato","Escreva para alguém com quem você não fala há tempos."],
+["Mão estendida","Ofereça ajuda concreta a alguém hoje."],
+["Passo de reconciliação","Reconheça um erro ou peça desculpas por algo pendente."],
+["Conexão que ajuda","Apresente duas pessoas que poderiam se ajudar."]]
+};
+MICRO.Q=[MICRO.M[0],MICRO.M[1],MICRO.P[1],MICRO.P[7],MICRO.T[0],MICRO.T[4],MICRO.G[0],MICRO.G[3]];
+
+/* Perguntas de reflexão da noite */
+const REFL=[
+"O que aprendi hoje que eu não sabia ontem?","Qual foi minha maior vitória de hoje, mesmo pequena?","Onde posso melhorar amanhã, com gentileza comigo mesmo?","Quem me ajudou hoje e como posso agradecer?","Fiz algo hoje que me aproximou de quem eu quero ser?","O que tirou meu foco hoje e como posso evitar amanhã?","Que emoção mais senti hoje e o que ela quis me dizer?","Qual foi a decisão mais difícil de hoje e o que ela me ensinou?","Ajudei alguém hoje? Como foi?","Pelo que sou grato neste dia?","O que eu faria diferente se vivesse este dia de novo?","Qual é a única coisa mais importante para amanhã?","Cuidei do meu corpo e da minha energia hoje?","Que feedback recebi ou dei hoje e o que ele diz sobre meu crescimento?"
+];
+
+/* embaralhamento fixo: todo mundo vê a mesma frase no mesmo dia */
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry(2026);
+const PHRASES=RAW.map((p,i)=>({id:i,c:p[0],t:p[1],a:p[2]||"",s:p[3]||""})).sort(()=>rnd()-.5);
+
+/* =====================  ILUSTRAÇÕES (flat vector)  ===================== */
+const sky=(a,b)=>`<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="400" height="220" fill="url(#sk)"/>`;
+const pine=(x,y,s,c)=>`<g fill="${c}"><polygon points="${x},${y-70*s} ${x-22*s},${y-25*s} ${x+22*s},${y-25*s}"/><polygon points="${x},${y-50*s} ${x-28*s},${y-5*s} ${x+28*s},${y-5*s}"/><rect x="${x-3*s}" y="${y-6*s}" width="${6*s}" height="${14*s}"/></g>`;
+const person=(x,skin,shirt,pants)=>`<g><circle cx="${x}" cy="118" r="15" fill="${skin}"/><path d="M${x-20} 190 L${x-17} 138 Q${x} 128 ${x+17} 138 L${x+20} 190Z" fill="${shirt}"/><rect x="${x-17}" y="188" width="14" height="26" rx="5" fill="${pants}"/><rect x="${x+3}" y="188" width="14" height="26" rx="5" fill="${pants}"/></g>`;
+/* ---- helpers de ilustração (estilo vetorial em camadas) ---- */
+const defs=(id,a,b)=>`<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const glow=(x,y,r,c,core)=>[2.5,1.85,1.4].map((k,i)=>`<circle cx="${x}" cy="${y}" r="${r*k}" fill="${c}" opacity="${[.13,.2,.3][i]}"/>`).join("")+`<circle cx="${x}" cy="${y}" r="${r}" fill="${core}"/>`;
+const bird=(x,y,s=1,c="#2b3a4a")=>`<path d="M${x-6*s} ${y} Q${x-3*s} ${y-5*s} ${x} ${y} Q${x+3*s} ${y-5*s} ${x+6*s} ${y}" stroke="${c}" stroke-width="${1.6*s}" fill="none" stroke-linecap="round"/>`;
+const flatCloud=(x,y,s,c,o=1)=>`<g fill="${c}" opacity="${o}"><rect x="${x-34*s}" y="${y}" width="${68*s}" height="${12*s}" rx="${6*s}"/><circle cx="${x-8*s}" cy="${y}" r="${12*s}"/><circle cx="${x+10*s}" cy="${y-3*s}" r="${15*s}"/></g>`;
+const mtn=(x,b,w,h,c1,c2,snow)=>{
+  const t=b-h;
+  let s=`<polygon points="${x-w/2},${b} ${x},${t} ${x+w/2},${b}" fill="${c1}"/><polygon points="${x},${t} ${x+w/2},${b} ${x+w*.06},${b}" fill="${c2}"/>`;
+  if(snow){const k=h*.26;s+=`<polygon points="${x},${t} ${x-w*.13},${t+k} ${x-w*.06},${t+k*.8} ${x},${t+k*1.1} ${x+w*.06},${t+k*.8} ${x+w*.13},${t+k}" fill="${snow}" opacity=".95"/>`}
+  return s;
+};
+const row=(y,s,c,from,to,step,jit=0)=>{let o="",i=0;for(let x=from;x<=to;x+=step,i++){o+=pine(x+((i*37)%7-3)*jit,y,s*(0.8+((i*13)%5)*.1),c)}return o};
+const tree=(x,y,s,c)=>`<rect x="${x-2*s}" y="${y}" width="${4*s}" height="${12*s}" fill="#7a5a3a"/><circle cx="${x}" cy="${y-3*s}" r="${11*s}" fill="${c}"/><circle cx="${x-6*s}" cy="${y+1*s}" r="${7*s}" fill="${c}"/><circle cx="${x+6*s}" cy="${y+1*s}" r="${7*s}" fill="${c}"/>`;
+const bokeh=(list,c="#fff",o=.22)=>list.map(a=>`<circle cx="${a[0]}" cy="${a[1]}" r="${a[2]}" fill="${c}" opacity="${o}"/>`).join("");
+const STARS=[[30,22],[76,48],[130,16],[176,40],[236,20],[270,56],[318,18],[372,36],[390,70],[48,80],[210,76],[150,70]];
+
+/* lago com reflexo — usado de dia, no pôr do sol e à noite */
+function lake(p){
+  const sun=(p.stars?STARS.map(s=>`<circle cx="${s[0]}" cy="${s[1]}" r="1.6" fill="#fff" opacity=".9"/>`).join(""):"")+glow(p.sx,p.sy,p.sr,p.glow,p.core);
+  const world=
+    mtn(60,140,190,72,p.far,p.far2)+mtn(190,140,210,98,p.far,p.far2)+mtn(335,140,200,78,p.far,p.far2)+
+    `<rect y="106" width="400" height="36" fill="${p.haze}" opacity=".28"/>`+
+    mtn(120,140,240,86,p.mid,p.mid2,p.snow)+mtn(305,140,270,108,p.mid,p.mid2,p.snow)+
+    `<path d="M0 141 L0 133 Q50 125 100 134 T200 132 T300 134 T400 130 V141Z" fill="${p.shore}"/>`+row(139,.5,p.shore,6,400,17,1);
+  const ripples=[[40,152,70],[250,158,90],[110,170,60],[300,182,70],[170,196,80]].map(r=>`<rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="2.4" rx="1.2" fill="#fff" opacity=".22"/>`).join("");
+  const fg=pine(16,224,2.2,p.fg)+pine(62,229,1.6,p.fg)+pine(388,224,2.4,p.fg)+pine(344,230,1.5,p.fg)+
+    `<path d="M0 220 V198 Q34 202 66 216 L86 220Z" fill="${p.fg}"/><path d="M400 220 V196 Q364 202 330 216 L312 220Z" fill="${p.fg}"/>`;
+  return `<defs>${defs("sk",p.t,p.b)}${defs("wt",p.w1,p.w2)}<clipPath id="lk"><rect y="140" width="400" height="80"/></clipPath></defs>`+
+    `<rect width="400" height="220" fill="url(#sk)"/>${sun}<g>${world}</g>`+
+    `<rect y="140" width="400" height="80" fill="url(#wt)"/><g clip-path="url(#lk)"><g transform="translate(0 280) scale(1 -1)" opacity=".42">${sun}${world}</g></g>`+
+    ripples+(p.birds?bird(150,40)+bird(172,30,.8)+bird(130,28,.7):"")+fg;
+}
+const LAKE_DAY={t:"#bfe6f0",b:"#fff0d6",sx:70,sy:48,sr:20,glow:"#ffe6a8",core:"#fff6d0",far:"#a9cfdc",far2:"#8fbccd",mid:"#6fa7bb",mid2:"#4f8aa3",snow:"#f4fbff",haze:"#ffffff",shore:"#3d7f7a",w1:"#8ccbd9",w2:"#5aa9bd",fg:"#1f4e4a",birds:true};
+const LAKE_SUNSET={t:"#ff9a6b",b:"#ffe3a3",sx:355,sy:62,sr:24,glow:"#ffd08a",core:"#fff3c4",far:"#e58f7a",far2:"#d27468",mid:"#7b5d7f",mid2:"#5b4469",snow:"#ffd9b8",haze:"#ffd4a0",shore:"#3a3a5c",w1:"#f6b08a",w2:"#c9738a",fg:"#1d2b43",birds:true};
+const LAKE_NIGHT={t:"#101b3d",b:"#3a5a8c",sx:62,sy:46,sr:17,glow:"#cfe0ff",core:"#fff1c2",far:"#2b4170",far2:"#223660",mid:"#25395f",mid2:"#1b2c4c",snow:"#9fb6dc",haze:"#7f9bd0",shore:"#14213b",w1:"#1b2e55",w2:"#0f1c3a",fg:"#0a1224",stars:true};
+
+const peopleBG=(a,b)=>sky(a,b)+glow(200,98,38,"#ffe6b0","#fff4cf")+mtn(70,170,220,80,"#b7d3d9","#9fc2ca")+mtn(330,170,240,92,"#b7d3d9","#9fc2ca")+`<rect y="132" width="400" height="40" fill="#fff" opacity=".25"/><path d="M0 168 Q100 142 200 166 T400 154 V220 H0Z" fill="#8fd3a6"/>`+row(164,.55,"#5fae86",0,400,22,2)+`<path d="M0 200 Q120 178 250 198 T400 190 V220 H0Z" fill="#4f9d7e"/>`;
+
+const SCENES={
+lakeDay:()=>lake(LAKE_DAY),
+sunset:()=>lake(LAKE_SUNSET),
+lakeNight:()=>lake(LAKE_NIGHT),
+valley:()=>sky("#86d6ec","#fff3cf")+glow(310,58,20,"#fff1b0","#fff8d8")+flatCloud(90,50,1,"#fff",.95)+flatCloud(220,34,.7,"#fff",.9)+flatCloud(350,104,.6,"#fff",.8)+
+  mtn(70,132,200,74,"#6ec6b8","#58b0a4")+mtn(200,132,230,92,"#7fd0c0","#62b8aa","#ffffff")+mtn(340,132,210,66,"#6ec6b8","#58b0a4")+
+  `<path d="M0 132 Q100 108 200 128 T400 118 V220 H0Z" fill="#93d89a"/>`+row(128,.45,"#4fa874",20,390,26,2)+
+  `<path d="M0 158 Q120 126 240 154 T400 142 V220 H0Z" fill="#62c07f"/><path d="M0 192 Q140 152 280 190 T400 176 V220 H0Z" fill="#3fa36e"/>`+
+  `<path d="M172 220 C215 202 152 180 198 160 C228 148 206 138 208 128 L214 128 C220 138 246 148 226 160 C190 178 250 200 268 220Z" fill="#fff0c4"/>`+
+  tree(60,168,1,"#2e8a5c")+tree(338,164,1.1,"#2e8a5c")+tree(118,148,.6,"#3a9a66")+pine(26,198,.9,"#237a52")+pine(374,202,1,"#237a52")+
+  [[30,210,"#ff6b6b"],[52,214,"#ffd166"],[78,207,"#fff"],[96,214,"#ff6b6b"],[300,214,"#ffd166"],[330,209,"#fff"],[358,214,"#ff6b6b"],[384,208,"#ffd166"]].map(f=>`<circle cx="${f[0]}" cy="${f[1]}" r="2.6" fill="${f[2]}"/>`).join("")+
+  bird(150,36,1)+bird(172,26,.8),
+dawn:()=>sky("#ffd3a1","#f59b8a")+glow(160,112,34,"#ffe0a8","#fff4cc")+bird(250,40,1,"#6a4a5e")+bird(272,30,.8,"#6a4a5e")+
+  mtn(80,170,220,92,"#e8a091","#d88a86")+mtn(250,170,240,70,"#e8a091","#d88a86")+`<rect y="118" width="400" height="60" fill="#ffd9b8" opacity=".35"/>`+
+  mtn(150,185,280,100,"#b97a86","#9d6379")+mtn(330,185,240,84,"#b97a86","#9d6379")+`<rect y="140" width="400" height="60" fill="#ffc9a0" opacity=".25"/>`+
+  mtn(60,216,260,90,"#6a527a","#563f69")+mtn(260,216,300,74,"#6a527a","#563f69")+
+  `<path d="M0 206 Q100 190 200 204 T400 196 V220 H0Z" fill="#33284f"/>`+row(208,.8,"#33284f",10,400,22,2),
+ocean:()=>sky("#bfe9fb","#fff1d2")+glow(100,88,28,"#ffe9a8","#fff6cf")+flatCloud(250,50,1,"#fff",.95)+flatCloud(340,86,.7,"#fff",.9)+flatCloud(180,26,.6,"#fff",.85)+
+  mtn(310,124,130,34,"#8cc0d4","#76aec6")+mtn(362,124,90,22,"#8cc0d4","#76aec6")+
+  `<defs>${defs("sea","#6cc3de","#237fa8")}</defs><rect y="122" width="400" height="98" fill="url(#sea)"/>`+
+  [[128,52],[137,36],[147,22]].map(a=>`<rect x="${100-a[1]/2}" y="${a[0]}" width="${a[1]}" height="3" rx="1.5" fill="#fff6cf" opacity=".85"/>`).join("")+
+  `<path d="M246 150 H294 L286 160 H254Z" fill="#e76f51"/><rect x="269" y="116" width="2" height="34" fill="#5b4636"/><polygon points="271,118 271,146 292,146" fill="#fff"/><polygon points="268,124 268,146 252,146" fill="#fdf0d5"/>`+
+  `<path d="M0 160 Q50 146 100 160 T200 160 T300 160 T400 160 V220 H0Z" fill="#3a9bc0" opacity=".85"/><path d="M0 184 Q50 168 100 184 T200 184 T300 184 T400 184 V220 H0Z" fill="#1f7399"/><path d="M0 208 Q50 196 100 208 T200 208 T300 208 T400 208 V220 H0Z" fill="#155a7a"/>`+
+  `<path d="M24 176 q12 -6 24 0 M150 194 q12 -6 24 0 M300 178 q12 -6 24 0 M210 172 q10 -5 20 0" stroke="#e8fbff" stroke-width="2" fill="none" opacity=".7" stroke-linecap="round"/>`+bird(60,40)+bird(82,30,.8),
+forest:()=>sky("#d9f2e3","#fff4d6")+glow(310,50,22,"#fff2b8","#fff9dd")+
+  `<g fill="#fff" opacity=".17"><polygon points="310,0 240,220 285,220"/><polygon points="310,0 330,220 375,220"/><polygon points="310,0 160,220 205,220"/></g>`+
+  row(122,.7,"#a9d8bf",0,400,24,3)+`<rect y="92" width="400" height="50" fill="#fff" opacity=".3"/>`+
+  row(152,1,"#7dbda3",5,400,28,3)+`<rect y="118" width="400" height="50" fill="#e9f7ee" opacity=".3"/>`+
+  row(184,1.4,"#4d9a7c",12,400,34,4)+`<path d="M0 192 Q150 170 300 188 T400 180 V220 H0Z" fill="#2f735d"/>`+
+  `<rect y="200" width="400" height="20" fill="#2a6b56"/>`+row(216,2,"#1f5d4b",25,400,70,6)+bird(90,34)+bird(112,24,.8),
+dunes:()=>sky("#ffd7a6","#ffb48a")+glow(95,86,30,"#fff0c0","#fff7da")+mtn(318,142,150,38,"#e5a173","#d58f64")+
+  `<path d="M0 150 Q100 108 200 148 T400 134 V220 H0Z" fill="#f4bd86"/><path d="M96 124 Q150 134 200 148 Q130 190 60 220 H0 V152 Q48 130 96 124Z" fill="#e3a06b"/>`+
+  `<path d="M0 182 Q110 140 230 182 T400 168 V220 H0Z" fill="#e69a62"/><path d="M130 158 Q180 168 230 182 Q170 205 120 220 H0 V186 Q60 162 130 158Z" fill="#cf8350"/>`+
+  `<g fill="#3f8a5f"><rect x="330" y="150" width="9" height="42" rx="4.5"/><rect x="318" y="164" width="14" height="6" rx="3"/><rect x="318" y="156" width="6" height="14" rx="3"/><rect x="337" y="160" width="14" height="6" rx="3"/><rect x="345" y="152" width="6" height="14" rx="3"/></g>`+
+  `<path d="M0 208 Q120 176 250 208 T400 198 V220 H0Z" fill="#b9693a"/>`+bird(220,40,1,"#7a4a3a")+bird(244,30,.8,"#7a4a3a"),
+leaf:()=>sky("#eaf7d8","#bfe59a")+bokeh([[40,40,22],[330,170,28],[120,196,18],[250,56,14],[372,96,20],[200,120,10]])+`<defs>${defs("lf","#86d9a0","#2f9468")}</defs>`+
+  `<path d="M-10 92 C30 20 130 8 205 20 C172 84 80 112 -10 92Z" fill="#74c69d" opacity=".9"/><path d="M-6 88 C60 70 130 46 200 22" stroke="#3f9a72" stroke-width="3" fill="none" opacity=".7"/>`+
+  `<path d="M30 218 C50 66 250 10 392 32 C372 156 220 228 30 218Z" fill="url(#lf)"/><path d="M30 218 C130 150 260 92 392 32 C250 10 50 66 30 218Z" fill="#fff" opacity=".12"/>`+
+  `<path d="M30 218 C130 150 250 90 392 32" stroke="#2d6a4f" stroke-width="5" fill="none" stroke-linecap="round"/>`+
+  `<g stroke="#2d6a4f" stroke-width="3" stroke-linecap="round" fill="none" opacity=".6"><path d="M104 176 L136 200"/><path d="M148 146 L186 178"/><path d="M200 118 L242 150"/><path d="M258 92 L300 120"/><path d="M118 168 L104 132"/><path d="M172 134 L170 98"/><path d="M232 104 L236 68"/><path d="M296 76 L300 46"/></g>`+
+  `<path d="M290 150 C290 150 270 178 290 192 C310 206 328 180 290 150Z" fill="#cdf1fb"/><path d="M285 178 Q282 188 291 192" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>`+
+  `<path d="M150 70 C150 70 138 86 150 95 C162 104 172 86 150 70Z" fill="#e3f7ff"/>`,
+flower:()=>sky("#ffe8ef","#ffc7d6")+bokeh([[44,50,24],[352,44,18],[366,164,30],[40,172,20],[120,22,10],[290,196,14]])+
+  `<defs><radialGradient id="pt"><stop offset="0" stop-color="#ff7aa0"/><stop offset="1" stop-color="#ffb3c8"/></radialGradient><radialGradient id="ct"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#f4a261"/></radialGradient></defs>`+
+  [0,45,90,135].map(a=>`<ellipse cx="200" cy="110" rx="24" ry="92" fill="url(#pt)" transform="rotate(${a} 200 110)"/>`).join("")+
+  [22.5,67.5,112.5,157.5].map(a=>`<ellipse cx="200" cy="110" rx="15" ry="66" fill="#ff5d8f" opacity=".8" transform="rotate(${a} 200 110)"/>`).join("")+
+  `<circle cx="200" cy="110" r="30" fill="url(#ct)"/><g fill="#d9822b"><circle cx="190" cy="102" r="3.5"/><circle cx="210" cy="104" r="3.5"/><circle cx="200" cy="121" r="3.5"/><circle cx="188" cy="118" r="3"/><circle cx="212" cy="120" r="3"/><circle cx="200" cy="108" r="3"/></g>`+
+  `<circle cx="330" cy="48" r="5" fill="#fff" opacity=".8"/>`,
+hug:()=>peopleBG("#ffe3cf","#ffc99f")+`<ellipse cx="198" cy="214" rx="64" ry="5" fill="#2d6a4f" opacity=".35"/><g><rect x="150" y="186" width="14" height="28" rx="5" fill="#27374d"/><rect x="170" y="186" width="14" height="28" rx="5" fill="#27374d"/><path d="M146 190 L152 140 Q170 128 190 140 L196 190Z" fill="#4361ee"/><circle cx="176" cy="116" r="16" fill="#f1c27d"/><path d="M161 112 Q176 94 192 112 Q184 104 161 112Z" fill="#5a3825"/></g><g><rect x="212" y="186" width="14" height="28" rx="5" fill="#3a2a4d"/><rect x="232" y="186" width="14" height="28" rx="5" fill="#3a2a4d"/><path d="M204 190 L210 140 Q228 128 246 140 L252 190Z" fill="#f72585"/><circle cx="224" cy="118" r="16" fill="#8d5524"/><path d="M208 118 Q224 92 240 118 Q232 104 208 118Z" fill="#1f1a17"/></g><path d="M160 148 Q198 160 238 146" stroke="#4361ee" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M240 152 Q200 164 162 152" stroke="#f72585" stroke-width="9" fill="none" stroke-linecap="round"/>`+bird(60,50)+bird(340,40,.9),
+wave:()=>peopleBG("#d7f0ff","#fff0cf")+`<ellipse cx="120" cy="214" rx="34" ry="4.5" fill="#2d6a4f" opacity=".35"/><ellipse cx="285" cy="214" rx="34" ry="4.5" fill="#2d6a4f" opacity=".35"/>`+person(120,"#f1c27d","#ff7b54","#27374d")+person(285,"#8d5524","#3a86ff","#3a2a4d")+`<path d="M138 146 Q158 118 160 98" stroke="#ff7b54" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="160" cy="92" r="6" fill="#f1c27d"/><path d="M267 146 Q247 118 245 98" stroke="#3a86ff" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="245" cy="92" r="6" fill="#8d5524"/>`+bird(210,44)+bird(232,34,.8)
+};
+const NATURE=["lakeDay","sunset","valley","dawn","ocean","forest","dunes","leaf","flower"];
+
+/* camada de clima/hora por cima da ilustração (noite, nuvens, chuva, neve, neblina) */
+const cloud=(x,y,s,f,o)=>`<g fill="${f}" opacity="${o}"><ellipse cx="${x}" cy="${y}" rx="${36*s}" ry="${14*s}"/><ellipse cx="${x+22*s}" cy="${y-9*s}" rx="${26*s}" ry="${16*s}"/><ellipse cx="${x-22*s}" cy="${y-6*s}" rx="${22*s}" ry="${12*s}"/></g>`;
+function ambient(scene){
+  const h=new Date().getHours(), w=wxNow;
+  const night=w?w.night:(h<6||h>=18), c=w?w.code:0;
+  const rain=(c>=51&&c<=67)||(c>=80&&c<=82)||c>=95, snow=(c>=71&&c<=77)||(c>=85&&c<=86), fog=c===45||c===48, cloudy=c>=2;
+  let s="";
+  if(night&&scene!=="lakeNight"){
+    s+=`<rect width="400" height="220" fill="#0a1633" opacity=".5"/>`;
+    [[40,24],[96,52],[150,18],[220,38],[272,16],[352,60],[120,86],[24,90]].forEach(p=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="1.7" fill="#fff" opacity=".9"/>`);
+    s+=`<circle cx="338" cy="42" r="26" fill="#ffe9a8" opacity=".22"/><circle cx="338" cy="42" r="15" fill="#ffe9a8"/>`;
+  }
+  if(cloudy||rain||snow){
+    const dark=rain||c>=95, f=night?"#7d8fae":dark?"#8796ab":"#ffffff";
+    if(dark)s+=`<rect width="400" height="220" fill="#43566b" opacity=".25"/>`;
+    s+=cloud(70,34,1.2,f,.92)+cloud(210,22,1.5,f,.9)+cloud(330,48,1,f,.9);
+  }
+  if(rain){
+    s+=`<g stroke="#d6ecff" stroke-width="1.6" stroke-linecap="round" opacity=".75"><animateTransform attributeName="transform" type="translate" from="0 -24" to="-8 0" dur=".6s" repeatCount="indefinite"/>`;
+    for(let i=0;i<48;i++){const x=(i*47)%420,y=(i*61)%240-20;s+=`<line x1="${x}" y1="${y}" x2="${x-5}" y2="${y+14}"/>`}
+    s+=`</g>`;
+  }
+  if(snow){
+    s+=`<g fill="#fff" opacity=".9"><animateTransform attributeName="transform" type="translate" from="0 -20" to="6 0" dur="2.2s" repeatCount="indefinite"/>`;
+    for(let i=0;i<40;i++){s+=`<circle cx="${(i*43)%410}" cy="${(i*67)%240-20}" r="${1.4+(i%3)*.7}"/>`}
+    s+=`</g>`;
+  }
+  if(fog)s+=`<rect y="110" width="400" height="110" fill="#fff" opacity=".35"/><ellipse cx="120" cy="150" rx="150" ry="14" fill="#fff" opacity=".4"/><ellipse cx="300" cy="185" rx="160" ry="14" fill="#fff" opacity=".4"/>`;
+  return s;
+}
+
+/* =====================  UTILIDADES / ESTADO  ===================== */
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const pad=n=>String(n).padStart(2,"0");
+const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromKey=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12)};
+const dayNum=d=>Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);
+const mod=(n,m)=>((n%m)+m)%m;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today=new Date();today.setHours(12,0,0,0);
+const br=d=>d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+
+let sel=new Date(today), view=new Date(today.getFullYear(),today.getMonth(),1);
+let offset=0, filter="all", mode=new Date().getHours()>=18?"n":"m";
+let favs=store.get("nd_favs",[]);
+let done=store.get("nd_done",{});
+let notes=store.get("nd_notes",{});         // {"2026-11-12":{n:"",r:"",q:"",t:timestamp}}
+let micro=store.get("nd_micro",{});
+let goals=store.get("nd_goals2",null);       // [{id,t,n,d,per,wk|mk,from}]
+if(!Array.isArray(goals)){goals=[];const og=store.get("nd_goals",{});Object.keys(og||{}).forEach(wk=>{const o=og[wk];if(o&&(o.t||o.d))goals.push({id:"w"+wk,t:o.t||"Meta da semana",n:o.n||5,d:o.d||0,per:"w",wk,from:null,created:Date.now()})});store.set("nd_goals2",goals)}
+let msel=store.get("nd_msel",{}), curMicroTitle="";
+let rem=store.get("nd_rem",{on:false,time:"08:00",last:""});
+let place=store.get("nd_place",{name:"São Paulo",lat:-23.55,lon:-46.63});
+let wxNow=null, curScene="sunrise", dirty=false;
+
+const pool=()=>filter==="all"?PHRASES:PHRASES.filter(p=>p.c===filter);
+const phraseFor=(d,off=0)=>{const p=pool();return p[mod(dayNum(d)+off,p.length)]};
+const questionFor=(d,off=0)=>REFL[mod(dayNum(d)+off,REFL.length)];
+const microFor=(p,k)=>{const l=MICRO[p.c];return l[mod(p.id+(msel[k]||0),l.length)]};
+const sameDay=(a,b)=>keyOf(a)===keyOf(b);
+/* o que está sendo mostrado agora (frase ou pergunta) */
+function shown(){
+  if(mode==="n"){const nn=notes[keyOf(sel)];return {text:(offset===0&&nn&&nn.r&&nn.q)?nn.q:questionFor(sel,offset),cite:"",tag:"Reflexão da noite",id:null,c:"M"}}
+  const p=phraseFor(sel,offset);
+  return {text:p.t,cite:p.a?`— ${p.a}`:"",src:p.s,tag:CATS[p.c],id:p.id,c:p.c};
+}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2200)}
+function download(name,text,mime){
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:mime}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+
+/* =====================  RENDER  ===================== */
+function renderTop(){
+  const h=new Date().getHours();
+  $("#hello").textContent=h<12?"Bom dia ☀️":h<18?"Boa tarde 🌤️":"Boa noite 🌙";
+  $("#dow").textContent=today.toLocaleDateString("pt-BR",{weekday:"long"});
+  $("#date").textContent=today.toLocaleDateString("pt-BR",{day:"numeric",month:"long",year:"numeric"});
+  $("#cityName").textContent=place.name;
+}
+function renderScene(){
+  const it=shown(), p=it.id!=null?PHRASES.find(x=>x.id===it.id):null;
+  if(mode==="n")curScene="lakeNight";
+  else if(p&&p.c==="G")curScene=p.id%2?"hug":"wave";
+  else curScene=NATURE[(p.id*3+p.t.length)%NATURE.length];
+  $("#scene").innerHTML=`<svg viewBox="0 0 400 220" role="img" aria-label="Ilustração vetorial">${SCENES[curScene]()}${ambient(curScene)}</svg>`;
+}
+function renderPhrase(popScene){
+  const it=shown(), q=$("#quote");
+  q.textContent=it.text;q.classList.remove("fade");void q.offsetWidth;q.classList.add("fade");
+  $("#tag").textContent=it.tag;
+  const c=$("#cite");
+  if(it.cite){c.hidden=false;c.innerHTML=`${esc(it.cite)}<br><small>${esc(it.src)} · tradução livre · fonte verificada</small>`}else c.hidden=true;
+  renderScene();
+  if(popScene){const h=$("#hero");h.classList.remove("pop");void h.offsetWidth;h.classList.add("pop")}
+  const isToday=sameDay(sel,today), lab=mode==="n"?"Pergunta":"Frase";
+  $("#meta").textContent=(isToday?`${lab} de hoje`:`${lab} de ${sel.toLocaleDateString("pt-BR",{day:"numeric",month:"long"})}`)+(offset?` · variação ${offset}`:"");
+  $("#more").textContent=mode==="n"?"✨ Outra pergunta":"✨ Outra frase";
+  $("#modeM").classList.toggle("on",mode==="m");$("#modeN").classList.toggle("on",mode==="n");
+  const fb=$("#fav");fb.hidden=mode==="n";
+  if(it.id!=null){const f=favs.includes(it.id);fb.classList.toggle("on",f);fb.textContent=f?"♥":"♡"}
+  $("#check").classList.toggle("on",!!done[keyOf(sel)]);
+  $("#habitTxt").textContent=isToday?"Aplique a frase em uma ação e marque.":"Registro do dia "+br(sel);
+  const nn=notes[keyOf(sel)];
+  reflQ=mode==="n"?it.text:((nn&&nn.r&&nn.q)||questionFor(sel,0));
+  $("#reflLbl").textContent="🌙 "+reflQ;
+  renderMicro();
+}
+function renderChips(){
+  const items=[["all","Todas"],...Object.entries(CATS)];
+  $("#chips").innerHTML=items.map(([k,v])=>`<button class="chip ${filter===k?"on":""}" data-k="${k}" role="tab" aria-selected="${filter===k}">${v}</button>`).join("");
+}
+function streak(){
+  let n=0,d=new Date(today);
+  if(!done[keyOf(d)])d.setDate(d.getDate()-1);
+  while(done[keyOf(d)]){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+const hasNote=k=>{const n=notes[k];return !!(n&&((n.n&&n.n.trim())||(n.r&&n.r.trim())))};
+function renderCal(){
+  const y=view.getFullYear(),m=view.getMonth();
+  $("#monthTitle").textContent=view.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+  const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();
+  let h="DSTQQSS".split("").map(w=>`<div class="wd">${w}</div>`).join("");
+  for(let i=0;i<first;i++)h+=`<div class="d empty"></div>`;
+  for(let i=1;i<=days;i++){
+    const dt=new Date(y,m,i,12),k=keyOf(dt);
+    h+=`<button class="d ${sameDay(dt,today)?"today":""} ${sameDay(dt,sel)?"sel":""} ${done[k]?"done":""} ${hasNote(k)?"note":""}" data-d="${k}" aria-label="${dt.toLocaleDateString("pt-BR",{day:"numeric",month:"long"})}">${i}</button>`;
+  }
+  $("#grid").innerHTML=h;
+  $("#streak").textContent=streak();
+}
+function renderFavs(){
+  $("#favCount").textContent=favs.length;
+  $("#favList").innerHTML=favs.length?favs.map(id=>{const p=PHRASES.find(x=>x.id===id);return `<li><span>${esc(p.t)}${p.a?`<br><small class="empty-msg">— ${esc(p.a)}</small>`:""}</span><button data-r="${id}" aria-label="Remover">✕</button></li>`}).join(""):`<li class="empty-msg" style="background:none;padding:0">Toque no ♡ para guardar as frases que mais combinam com você.</li>`;
+}
+/* ---- anotações ---- */
+let histF="all", reflQ="";
+const firstSentence=r=>(r.split(/[.!?\n]/).map(s=>s.trim()).find(Boolean)||"");
+function renderNotes(){
+  const k=keyOf(sel),n=notes[k]||{};
+  $("#noteDate").textContent=sameDay(sel,today)?"hoje":sel.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"});
+  $("#noteTxt").value=n.n||"";$("#reflTxt").value=n.r||"";dirty=false;
+  $("#saveInfo").textContent=n.t?"Salvo em "+new Date(n.t).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"Ainda não salvo";
+  const st=$("#reflStar");st.textContent=n.star?"★ Guardada":"☆ Guardar reflexão";st.classList.toggle("on",!!n.star);
+  renderHist();
+}
+function renderHist(){
+  const all=Object.keys(notes).filter(hasNote).sort().reverse();
+  const keys=histF==="star"?all.filter(k=>notes[k].star):all;
+  $("#histCount").textContent=all.length;
+  document.querySelectorAll("#histF button").forEach(b=>b.classList.toggle("on",b.dataset.f===histF));
+  $("#hist").innerHTML=keys.length?keys.slice(0,100).map(k=>{
+    const e=notes[k],txt=histF==="star"?(e.r||e.n):(e.n||e.r);
+    return `<li class="hi"><button class="hmain" data-n="${k}"><b>${e.star?"⭐ ":""}${br(fromKey(k))}${histF==="star"&&e.q?" · "+esc(e.q):""}</b><span>${esc((txt||"").replace(/\s+/g," "))}</span></button>${e.r&&e.r.trim()?`<button class="hgoal" data-g="${k}" aria-label="Transformar em meta" title="Transformar em meta">🎯</button>`:""}</li>`;
+  }).join(""):`<li class="hint">${histF==="star"?"Guarde reflexões importantes com ☆ e elas aparecem aqui.":"Suas anotações salvas aparecerão aqui."}</li>`;
+}
+function saveNotes(silent){
+  const k=keyOf(sel),n=$("#noteTxt").value,r=$("#reflTxt").value,old=notes[k]||{};
+  if(!n.trim()&&!r.trim())delete notes[k];
+  else notes[k]={n,r,q:r.trim()?reflQ:"",star:!!old.star&&!!r.trim(),t:Date.now()};
+  store.set("nd_notes",notes);dirty=false;
+  renderNotes();renderCal();
+  if(!silent)toast("Anotação salva ✓");
+}
+const flush=()=>{if(dirty)saveNotes(true)};
+["#noteTxt","#reflTxt"].forEach(s=>$(s).addEventListener("input",()=>{dirty=true;$("#saveInfo").textContent="Alterações não salvas…"}));
+$("#saveNote").onclick=()=>saveNotes(false);
+document.addEventListener("keydown",e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="s"&&["noteTxt","reflTxt"].includes(document.activeElement&&document.activeElement.id)){e.preventDefault();saveNotes(false)}
+});
+document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
+addEventListener("pagehide",flush);
+
+/* reflexão: guardar como insight ou virar meta */
+$("#reflStar").onclick=()=>{
+  if(!$("#reflTxt").value.trim()){toast("Escreva sua reflexão antes de guardar");return}
+  saveNotes(true);const k=keyOf(sel);
+  notes[k].star=!notes[k].star;store.set("nd_notes",notes);renderNotes();
+  toast(notes[k].star?"⭐ Reflexão guardada":"Reflexão removida das guardadas");
+};
+$("#reflGoal").onclick=()=>{
+  const r=$("#reflTxt").value;if(r.trim())saveNotes(true);
+  openGoalDialog({text:firstSentence(r),from:{type:"refl",k:keyOf(sel),q:reflQ}});
+};
+/* histórico: filtro, abrir dia, virar meta */
+$("#histF").onclick=e=>{const b=e.target.closest("button");if(!b)return;histF=b.dataset.f;renderHist()};
+$("#hist").onclick=e=>{
+  const g=e.target.closest("[data-g]");
+  if(g){const k=g.dataset.g,n=notes[k];openGoalDialog({text:firstSentence(n.r||""),from:{type:"refl",k,q:n.q||""}});return}
+  const b=e.target.closest("[data-n]");if(!b)return;
+  flush();sel=fromKey(b.dataset.n);offset=0;view=new Date(sel.getFullYear(),sel.getMonth(),1);renderAll();
+  $("#notesCard").scrollIntoView({behavior:"smooth",block:"start"});
+};
+/* exportar / importar */
+function notesAsText(){
+  const keys=Object.keys(notes).filter(hasNote).sort().reverse();
+  let t="NORTE DIÁRIO — Minhas anotações\nExportado em "+new Date().toLocaleString("pt-BR")+"\n\n";
+  keys.forEach(k=>{const e=notes[k];t+=`===== ${br(fromKey(k))}${e.star?"  ⭐ reflexão guardada":""} =====\n`;
+    if(e.n&&e.n.trim())t+=`Anotações:\n${e.n.trim()}\n\n`;
+    if(e.r&&e.r.trim())t+=`Reflexão — ${e.q||""}\n${e.r.trim()}\n\n`;t+="\n"});
+  if(!keys.length)t+="(nenhuma anotação salva ainda)\n";
+  if(goals.length){t+="===== METAS =====\n";goals.forEach(g=>{t+=`- ${g.t} (${g.d}/${g.n}) · ${gPer(g)}\n`})}
+  return t;
+}
+$("#expTxt").onclick=()=>{flush();download(`norte-diario-anotacoes-${keyOf(today)}.txt`,notesAsText(),"text/plain;charset=utf-8");toast("Arquivo .txt gerado")};
+$("#expJson").onclick=()=>{flush();download(`norte-diario-backup-${keyOf(today)}.json`,JSON.stringify({app:"norte-diario",v:3,notes,done,micro,msel,goals,favs},null,2),"application/json");toast("Backup gerado")};
+$("#impBtn").onclick=()=>$("#impFile").click();
+$("#impFile").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const j=JSON.parse(await f.text());if(j.app!=="norte-diario")throw 0;
+    notes={...notes,...(j.notes||{})};done={...done,...(j.done||{})};micro={...micro,...(j.micro||{})};msel={...msel,...(j.msel||{})};
+    const ids=new Set(goals.map(g=>g.id));(Array.isArray(j.goals)?j.goals:[]).forEach(g=>{if(g&&g.id&&!ids.has(g.id))goals.push(g)});
+    favs=[...new Set([...favs,...(j.favs||[])])];
+    store.set("nd_notes",notes);store.set("nd_done",done);store.set("nd_micro",micro);store.set("nd_msel",msel);store.set("nd_goals2",goals);store.set("nd_favs",favs);
+    renderAll();toast("Backup importado ✓");
+  }catch(err){toast("Arquivo inválido")}
+  e.target.value="";
+};
+
+/* ---- metas (nascem de reflexões, micro-desafios ou do zero) ---- */
+function weekKey(){const d=new Date(today);d.setDate(d.getDate()-((d.getDay()+6)%7));return keyOf(d)}
+const monthKey=d=>keyOf(d).slice(0,7);
+function gState(g){
+  if(g.d>=g.n)return "done";
+  if(g.per==="w"&&g.wk!==weekKey())return "expired";
+  if(g.per==="m"&&g.mk!==monthKey(today))return "expired";
+  return "active";
+}
+function gPer(g){
+  if(g.per==="w"){const s=fromKey(g.wk),e=new Date(s);e.setDate(e.getDate()+6);return `Semana ${pad(s.getDate())}/${pad(s.getMonth()+1)}–${pad(e.getDate())}/${pad(e.getMonth()+1)}`}
+  if(g.per==="m")return fromKey(g.mk+"-01").toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+  return "Sem prazo";
+}
+function goalItem(g,old){
+  const pct=Math.min(100,Math.round(g.d/Math.max(1,g.n)*100)),st=gState(g);
+  const origin=g.from&&g.from.k?`<button class="pill link" data-act="origin" data-k="${g.from.k}">${g.from.type==="micro"?"⚡ Micro-desafio":"💭 Reflexão"} · ${br(fromKey(g.from.k)).slice(0,5)}</button>`:"";
+  return `<li class="goal" data-id="${g.id}"><div class="g-h"><b>${esc(g.t)}</b><button data-act="del" aria-label="Remover meta">✕</button></div>`+
+    `<div class="g-m"><span class="pill">${esc(gPer(g))}</span>${origin}${st==="done"?'<span class="pill ok">✓ concluída</span>':st==="expired"?'<span class="pill">encerrada</span>':""}</div>`+
+    `<div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>`+
+    `<div class="row"><span class="hint">${g.d} de ${g.n} · ${pct}%</span>${old?"":'<span style="display:flex;gap:6px"><button class="btn sm" data-act="minus" aria-label="Menos um">−1</button><button class="btn sm primary" style="flex:none" data-act="plus" aria-label="Mais um">+1</button></span>'}</div></li>`;
+}
+function renderGoal(){
+  const act=goals.filter(g=>gState(g)==="active"),old=goals.filter(g=>gState(g)!=="active");
+  $("#goalList").innerHTML=act.length?act.map(g=>goalItem(g)).join(""):`<li class="hint">Nenhuma meta ativa. Crie uma ou use o botão 🎯 numa reflexão ou micro-desafio.</li>`;
+  $("#goalOld").textContent=old.length;
+  $("#goalOldList").innerHTML=old.length?old.map(g=>goalItem(g,true)).join(""):`<li class="hint">Nada por aqui ainda.</li>`;
+}
+$("#goalsCard").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const a=b.dataset.act;
+  if(a==="origin"){flush();sel=fromKey(b.dataset.k);offset=0;view=new Date(sel.getFullYear(),sel.getMonth(),1);renderAll();$("#notesCard").scrollIntoView({behavior:"smooth"});return}
+  const li=b.closest("[data-id]"),g=li&&goals.find(x=>x.id===li.dataset.id);if(!g)return;
+  if(a==="plus"){g.d++;if(g.d>=g.n)toast("🎉 Meta concluída: "+g.t)}
+  if(a==="minus")g.d=Math.max(0,g.d-1);
+  if(a==="del"){if(!confirm("Remover esta meta?"))return;goals=goals.filter(x=>x!==g)}
+  store.set("nd_goals2",goals);renderGoal();
+});
+/* janela "nova meta" */
+const gdlg=$("#goalDlg");let gdFrom=null,gdPer="w";
+function setPer(p){gdPer=p;document.querySelectorAll("#gdPer button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));$("#gdN").value=p==="w"?3:10}
+function openGoalDialog(o={}){
+  gdFrom=o.from||null;$("#gdText").value=(o.text||"").replace(/\s+/g," ").trim().slice(0,90);setPer("w");
+  const f=o.from;$("#gdFrom").textContent=f?(f.type==="refl"?`💭 Nasceu da reflexão${f.q?`: “${f.q}”`:""}`:`⚡ Nasceu do micro-desafio de ${br(fromKey(f.k))}`):"";
+  gdlg.showModal();$("#gdText").focus();
+}
+$("#goalAdd").onclick=()=>openGoalDialog({});
+$("#gdPer").onclick=e=>{const b=e.target.closest("button");if(b)setPer(b.dataset.p)};
+$("#gdCancel").onclick=()=>gdlg.close();
+$("#gdSave").onclick=()=>{
+  const t=$("#gdText").value.trim();if(!t){toast("Descreva a meta");return}
+  const n=Math.max(1,Math.min(99,parseInt($("#gdN").value)||1));
+  const g={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),t,n,d:0,per:gdPer,from:gdFrom,created:Date.now()};
+  if(gdPer==="w")g.wk=weekKey();if(gdPer==="m")g.mk=monthKey(today);
+  goals.unshift(g);store.set("nd_goals2",goals);
+  let extra="";
+  if(gdFrom&&gdFrom.type==="refl"&&notes[gdFrom.k]&&notes[gdFrom.k].r&&notes[gdFrom.k].r.trim()){notes[gdFrom.k].star=true;store.set("nd_notes",notes);extra=" e reflexão guardada ⭐";renderNotes()}
+  gdlg.close();renderGoal();toast("Meta criada 🎯"+extra);
+  $("#goalsCard").scrollIntoView({behavior:"smooth",block:"center"});
+};
+
+const renderAll=()=>{renderPhrase();renderCal();renderChips();renderFavs();renderNotes();renderGoal()};
+
+/* =====================  EVENTOS  ===================== */
+function goDay(delta){flush();sel.setDate(sel.getDate()+delta);offset=0;view=new Date(sel.getFullYear(),sel.getMonth(),1);renderAll()}
+$("#prev").onclick=()=>goDay(-1);
+$("#next").onclick=()=>goDay(1);
+$("#more").onclick=()=>{offset++;renderPhrase(true)};
+$("#modeM").onclick=()=>{mode="m";offset=0;renderPhrase()};
+$("#modeN").onclick=()=>{mode="n";offset=0;renderPhrase()};
+$("#chips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;filter=b.dataset.k;offset=0;mode="m";renderAll()};
+$("#grid").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;flush();sel=fromKey(b.dataset.d);offset=0;renderAll()};
+$("#pm").onclick=()=>{view.setMonth(view.getMonth()-1);renderCal()};
+$("#nm").onclick=()=>{view.setMonth(view.getMonth()+1);renderCal()};
+/* frase surpresa: toque na ilustração */
+const surprise=()=>{
+  const n=mode==="n"?REFL.length:pool().length;let o;
+  do{o=Math.floor(Math.random()*n)}while(n>1&&o===mod(offset,n));
+  offset=o;renderPhrase(true);toast(mode==="n"?"🎲 Pergunta surpresa!":"🎲 Frase surpresa!");
+};
+$("#hero").onclick=surprise;
+$("#hero").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();surprise()}};
+$("#fav").onclick=()=>{const id=shown().id;if(id==null)return;favs=favs.includes(id)?favs.filter(x=>x!==id):[...favs,id];store.set("nd_favs",favs);renderPhrase();renderFavs()};
+$("#favList").onclick=e=>{const b=e.target.closest("[data-r]");if(!b)return;favs=favs.filter(x=>x!==+b.dataset.r);store.set("nd_favs",favs);renderPhrase();renderFavs()};
+$("#check").onclick=()=>{const k=keyOf(sel);if(done[k])delete done[k];else{done[k]=1;toast("Mais um passo dado! 🌱")}store.set("nd_done",done);renderPhrase();renderCal()};
+
+/* compartilhar texto */
+$("#share").onclick=async()=>{
+  const it=shown(),text=`“${it.text}”${it.cite?" "+it.cite:""} — Norte Diário`;
+  try{if(navigator.share){await navigator.share({text});return}}catch(e){return}
+  try{await navigator.clipboard.writeText(text);toast("Frase copiada!")}catch(e){toast("Não foi possível copiar")}
+};
+
+/* ---------- cartão para stories (1080×1920) ---------- */
+function wrap(ctx,text,maxW){
+  const words=text.split(" "),lines=[];let l="";
+  words.forEach(w=>{const t=l?l+" "+w:w;if(ctx.measureText(t).width>maxW&&l){lines.push(l);l=w}else l=t});
+  if(l)lines.push(l);return lines;
+}
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+async function makeCard(){
+  const it=shown(),svg=$("#scene svg").cloneNode(true);
+  svg.setAttribute("xmlns","http://www.w3.org/2000/svg");svg.setAttribute("width","960");svg.setAttribute("height","528");
+  const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:"image/svg+xml"}));
+  const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});
+  const cv=document.createElement("canvas");cv.width=1080;cv.height=1920;const ctx=cv.getContext("2d");
+  const g=ctx.createLinearGradient(0,0,1080,1920);g.addColorStop(0,"#12303a");g.addColorStop(1,"#2f6b7a");ctx.fillStyle=g;ctx.fillRect(0,0,1080,1920);
+  ctx.fillStyle="#f4a261";ctx.font="700 38px 'Segoe UI',system-ui,sans-serif";ctx.textBaseline="alphabetic";
+  if("letterSpacing" in ctx)ctx.letterSpacing="8px";ctx.fillText("NORTE DIÁRIO",60,150);if("letterSpacing" in ctx)ctx.letterSpacing="0px";
+  ctx.fillStyle="rgba(255,255,255,.65)";ctx.font="400 32px 'Segoe UI',system-ui,sans-serif";
+  const ds=today.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});ctx.fillText(ds,60,205);
+  ctx.save();rr(ctx,60,260,960,528,44);ctx.clip();ctx.drawImage(img,60,260,960,528);ctx.restore();
+  URL.revokeObjectURL(url);
+  ctx.fillStyle="#f4a261";ctx.font="700 220px Georgia,serif";ctx.fillText("“",52,1030);
+  ctx.fillStyle="#fff";let size=70,lines;
+  do{ctx.font=`700 ${size}px 'Segoe UI',system-ui,sans-serif`;lines=wrap(ctx,it.text,930);size-=3}while(lines.length>9&&size>38);
+  const lh=Math.round(size*1.38+4);let y=1110;lines.forEach(l=>{ctx.fillText(l,75,y);y+=lh});
+  if(it.cite){ctx.fillStyle="#f4a261";ctx.font="600 38px 'Segoe UI',system-ui,sans-serif";y+=14;ctx.fillText(it.cite,75,y);ctx.fillStyle="rgba(255,255,255,.6)";ctx.font="400 30px 'Segoe UI',system-ui,sans-serif";wrap(ctx,it.src,930).forEach(l=>{y+=44;ctx.fillText(l,75,y)})}
+  ctx.fillStyle="rgba(255,255,255,.55)";ctx.font="400 32px 'Segoe UI',system-ui,sans-serif";ctx.textAlign="center";ctx.fillText("Um passo de cada vez ✦ rumo à sua evolução",540,1830);
+  return new Promise(res=>cv.toBlob(res,"image/png"));
+}
+$("#card").onclick=async()=>{
+  const b=$("#card");b.disabled=true;
+  try{
+    const blob=await makeCard(),file=new File([blob],`norte-diario-${keyOf(today)}.png`,{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]});b.disabled=false;return}catch(e){if(e&&e.name==="AbortError"){b.disabled=false;return}}}
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=file.name;document.body.appendChild(a);a.click();a.remove();toast("Imagem salva — é só postar nos stories 📸");
+  }catch(e){toast("Não consegui gerar a imagem")}
+  b.disabled=false;
+};
+
+/* ---------- timer (foco 25 min / micro 5 min) ---------- */
+let T=null;
+const fmt=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return pad(Math.floor(s/60))+":"+pad(s%60)};
+const RC=175.93;
+function renderRing(){
+  const rf=$("#ringF"),rt=$("#ringT"),mg=$("#microGo"),run=T&&T.label==="Micro-desafio";
+  if(run){
+    const l=T.rem!=null?T.rem:T.end-Date.now();
+    rf.style.strokeDashoffset=RC*(l/T.total);rf.classList.remove("ok");rt.textContent=fmt(l);mg.textContent=T.rem!=null?"▶ Retomar":"⏸ Pausar";
+  }else{
+    const d=!!micro[keyOf(sel)];
+    rf.style.strokeDashoffset=d?0:RC;rf.classList.toggle("ok",d);rt.textContent=d?"✓":"5:00";mg.textContent="▶ Iniciar 5 min";
+  }
+}
+function renderT(){
+  const f=$("#focus"),st=$("#stopT");
+  if(!T){f.textContent="▶ Foco 25 min";st.hidden=true;document.title="Norte Diário";renderRing();return}
+  const left=T.rem!=null?T.rem:T.end-Date.now();
+  f.textContent=(T.rem!=null?"▶ ":"⏸ ")+fmt(left)+(T.rem!=null?" pausado":" · "+T.label);st.hidden=false;
+  document.title=fmt(left)+" · "+T.label;renderRing();
+}
+function startT(min,label){T={end:Date.now()+min*60000,total:min*60000,label,rem:null,day:keyOf(sel)};renderT();toast(`${label}: ${min} minutos. Você consegue! 💪`)}
+function pauseT(){if(!T)return;if(T.rem==null)T.rem=T.end-Date.now();else{T.end=Date.now()+T.rem;T.rem=null}renderT()}
+function beep(){try{const a=new (window.AudioContext||window.webkitAudioContext)(),t=a.currentTime;[0,.25,.5].forEach((d,i)=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=660+i*110;g.gain.setValueAtTime(.2,t+d);g.gain.exponentialRampToValueAtTime(.001,t+d+.22);o.connect(g);g.connect(a.destination);o.start(t+d);o.stop(t+d+.24)})}catch(e){}}
+function notify(title,body){
+  try{if(!("Notification" in window)||Notification.permission!=="granted")return;
+    if(navigator.serviceWorker&&navigator.serviceWorker.ready&&location.protocol.startsWith("http")){navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:"icon-192.png",badge:"icon-192.png"})).catch(()=>new Notification(title,{body}))}
+    else new Notification(title,{body});
+  }catch(e){}
+}
+function finishT(){
+  const t=T;T=null;renderT();beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);
+  if(t.label==="Micro-desafio"&&t.day){
+    if(!micro[t.day]){micro[t.day]={t:curMicroTitle,at:Date.now()};store.set("nd_micro",micro)}
+    renderMicro();renderCal();toast("⚡ Micro-desafio concluído! Anote o que sentiu.");
+  }else toast(`✅ ${t.label} concluído!`);
+  notify("Norte Diário",`${t.label} concluído. Respire e comemore o passo dado.`);
+}
+$("#focus").onclick=()=>{if(!T)return startT(25,"Foco");pauseT()};
+
+/* ---- micro-desafio ---- */
+function microStreak(){let n=0,d=new Date(today);if(!micro[keyOf(d)])d.setDate(d.getDate()-1);while(micro[keyOf(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function renderMicro(){
+  const k=keyOf(sel),mp=phraseFor(sel,mode==="m"?offset:0),m=microFor(mp,k);
+  curMicroTitle=m[0];
+  $("#microTit").textContent=m[0];$("#microHint").textContent=m[1];$("#microTag").textContent=CATS[mp.c];
+  const md=!!micro[k],mb=$("#microDone");mb.classList.toggle("on",md);mb.textContent=md?"☑ Feito":"☐ Feito";
+  const s=microStreak();
+  $("#microStats").textContent=`🏅 ${Object.keys(micro).length} concluídos · 🔥 ${s} ${s===1?"dia":"dias"} seguidos`;
+  renderRing();
+}
+$("#microDone").onclick=()=>{const k=keyOf(sel);if(micro[k])delete micro[k];else{micro[k]={t:curMicroTitle,at:Date.now()};toast("⚡ Micro-desafio concluído!")}store.set("nd_micro",micro);renderMicro();renderCal()};
+$("#microSwap").onclick=()=>{const k=keyOf(sel);msel[k]=(msel[k]||0)+1;store.set("nd_msel",msel);renderMicro()};
+$("#microGo").onclick=()=>{if(!T)return startT(5,"Micro-desafio");if(T.label==="Micro-desafio")pauseT();else toast("Já existe um timer em andamento")};
+$("#microNote").onclick=()=>{
+  const ta=$("#noteTxt");ta.value=(ta.value.trim()?ta.value.replace(/\s*$/,"")+"\n\n":"")+`⚡ ${curMicroTitle}: `;
+  dirty=true;$("#saveInfo").textContent="Alterações não salvas…";
+  $("#notesCard").scrollIntoView({behavior:"smooth",block:"center"});ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);
+};
+$("#microGoal").onclick=()=>openGoalDialog({text:curMicroTitle,from:{type:"micro",k:keyOf(sel)}});
+
+/* ---- instalar (computador e celular) ---- */
+let deferredInstall=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;$("#installBtn").hidden=false});
+$("#installBtn").onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();try{await deferredInstall.userChoice}catch(e){}deferredInstall=null;$("#installBtn").hidden=true};
+addEventListener("appinstalled",()=>{$("#installBtn").hidden=true;toast("App instalado ✓")});
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+$("#stopT").onclick=()=>{T=null;renderT();toast("Timer encerrado")};
+setInterval(()=>{if(T&&T.rem==null){if(T.end-Date.now()<=0)finishT();else renderT()}},500);
+
+/* tema */
+$("#theme").onclick=()=>{
+  const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  const nx=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nx;store.set("nd_theme",nx);
+};
+const th=store.get("nd_theme",null);if(th)document.documentElement.dataset.theme=th;
+
+/* =====================  LEMBRETE DIÁRIO  ===================== */
+function renderRem(){
+  $("#remTime").value=rem.time;
+  $("#remBtn").textContent=rem.on?"Desativar":"Ativar";
+  const perm=("Notification" in window)?Notification.permission:"unsupported";
+  $("#remMsg").textContent=rem.on?`Lembrete ativo às ${rem.time}. Mantenha o app aberto ou instalado.`:perm==="denied"?"Notificações bloqueadas no navegador. Libere nas configurações do site.":perm==="unsupported"?"Este navegador não suporta notificações; use o calendário (.ics).":"";
+}
+$("#remBtn").onclick=async()=>{
+  if(rem.on){rem.on=false}else{
+    if(!("Notification" in window)){toast("Notificações não suportadas aqui. Use o .ics.");return}
+    const p=Notification.permission==="granted"?"granted":await Notification.requestPermission();
+    if(p!=="granted"){renderRem();toast("Permissão não concedida");return}
+    rem.on=true;rem.time=$("#remTime").value||"08:00";toast("Lembrete ativado 🔔");
+  }
+  store.set("nd_rem",rem);renderRem();
+};
+$("#remTime").onchange=e=>{rem.time=e.target.value||"08:00";store.set("nd_rem",rem);renderRem()};
+setInterval(()=>{
+  if(!rem.on)return;const n=new Date(),hm=pad(n.getHours())+":"+pad(n.getMinutes());
+  if(hm===rem.time&&rem.last!==keyOf(n)){rem.last=keyOf(n);store.set("nd_rem",rem);const p=phraseFor(today);notify("Norte Diário · sua frase de hoje",p.t)}
+},20000);
+$("#icsBtn").onclick=()=>{
+  const t=($("#remTime").value||"08:00").split(":"),n=new Date(),d=`${n.getFullYear()}${pad(n.getMonth()+1)}${pad(n.getDate())}T${t[0]}${t[1]}00`;
+  const link=location.protocol.startsWith("http")?location.href.split("#")[0]:"";
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Norte Diario//PT","BEGIN:VEVENT","UID:norte-diario-lembrete@norte","DTSTAMP:"+n.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z","DTSTART:"+d,"DURATION:PT10M","RRULE:FREQ=DAILY","SUMMARY:Norte Diário - sua frase de hoje","DESCRIPTION:Abra o Norte Diário e dê um passo rumo à sua evolução. "+link,"BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Norte Diário","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+  download("norte-diario-lembrete.ics",ics,"text/calendar");toast("Abra o arquivo para adicionar ao calendário");
+};
+
+/* =====================  CLIMA (Open-Meteo, sem chave)  ===================== */
+const WX=c=>c===0?["☀️","Céu limpo"]:c<=2?["🌤️","Poucas nuvens"]:c===3?["☁️","Nublado"]:c<=48?["🌫️","Neblina"]:c<=57?["🌦️","Garoa"]:c<=67?["🌧️","Chuva"]:c<=77?["❄️","Neve"]:c<=82?["🌧️","Pancadas"]:c<=86?["🌨️","Neve"]:["⛈️","Tempestade"];
+function showWx(w){
+  const [ico,txt]=WX(w.code);
+  $("#wxIco").textContent=ico;$("#wxTemp").textContent=Math.round(w.t)+"°";
+  $("#wxSub").textContent=`${txt} · ${Math.round(w.min)}° / ${Math.round(w.max)}°`+(w.old?" (offline)":"");
+  wxNow={code:w.code,night:w.isDay===0};renderScene();
+}
+async function loadWx(){
+  try{
+    const u=`https://api.open-meteo.com/v1/forecast?latitude=${place.lat}&longitude=${place.lon}&current=temperature_2m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1`;
+    const r=await fetch(u);if(!r.ok)throw 0;const j=await r.json();
+    const w={t:j.current.temperature_2m,code:j.current.weather_code,isDay:j.current.is_day,max:j.daily.temperature_2m_max[0],min:j.daily.temperature_2m_min[0]};
+    store.set("nd_wx",{...w,place:place.name});showWx(w);
+  }catch(e){
+    const c=store.get("nd_wx",null);
+    if(c&&c.place===place.name)showWx({...c,old:true});else{$("#wxSub").textContent="clima indisponível";$("#wxTemp").textContent="--°"}
+  }
+}
+setInterval(()=>{if(!document.hidden)loadWx()},30*60*1000);
+const dlg=$("#cityDlg");
+$("#cityBtn").onclick=()=>{dlg.showModal();$("#cityInput").focus()};
+$("#closeDlg").onclick=()=>dlg.close();
+function setPlace(p){place=p;store.set("nd_place",p);dlg.close();renderTop();$("#wxSub").textContent="carregando clima…";loadWx()}
+$("#geoBtn").onclick=()=>{
+  if(!navigator.geolocation){toast("Localização indisponível neste navegador");return}
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const {latitude:lat,longitude:lon}=pos.coords;let name="Minha localização";
+    try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&lat=${lat}&lon=${lon}&accept-language=pt-BR`);const j=await r.json();name=j.address.city||j.address.town||j.address.village||j.address.municipality||name}catch(e){}
+    setPlace({name,lat,lon});
+  },()=>toast("Permissão negada. Busque pelo nome da cidade."),{timeout:10000});
+};
+let tm;$("#cityInput").oninput=e=>{
+  clearTimeout(tm);const q=e.target.value.trim();if(q.length<2){$("#cityRes").innerHTML="";return}
+  tm=setTimeout(async()=>{
+    try{
+      const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5&language=pt`);const j=await r.json();
+      $("#cityRes").innerHTML=(j.results||[]).map((c,i)=>`<li><button data-i="${i}">${esc(c.name)} <small>${esc([c.admin1,c.country].filter(Boolean).join(", "))}</small></button></li>`).join("")||"<li class='empty-msg'>Nenhuma cidade encontrada</li>";
+      $("#cityRes").onclick=ev=>{const b=ev.target.closest("[data-i]");if(!b)return;const c=j.results[b.dataset.i];setPlace({name:c.name,lat:c.latitude,lon:c.longitude})};
+    }catch(e){$("#cityRes").innerHTML="<li class='empty-msg'>Sem conexão para buscar</li>"}
+  },350);
+};
+
+/* =====================  INÍCIO  ===================== */
+renderTop();renderAll();renderRem();renderT();loadWx();
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+</body>
+</html>
