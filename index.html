@@ -427,7 +427,7 @@ dialog h3{margin:0 0 12px}
 /* =====================  CONTEÚDO  =====================
    T carreira | P vida pessoal | M mente | G pessoas | Q citações (com autor e fonte)
    Para adicionar frases: ["T","texto"]  ·  citações: ["Q","texto","Autor","Obra"]       */
-const CATS={T:"Carreira",P:"Vida pessoal",M:"Mente",G:"Pessoas",Q:"Citações"};
+const CATS={T:"Carreira",P:"Vida pessoal",M:"Mente",G:"Pessoas",A:"Gratidão",Q:"Citações"};
 const RAW=[
 ["T","Competência é construída em dias comuns, repetindo o simples com atenção."],
 ["T","Peça feedback sem medo: ele é o atalho mais honesto para evoluir."],
@@ -507,7 +507,52 @@ const RAW=[
 ["Q","O que a vida quer da gente é coragem.","Guimarães Rosa","Grande Sertão: Veredas (1956)"],
 ["Q","Tudo vale a pena se a alma não é pequena.","Fernando Pessoa","Mensagem (1934), “Mar Português”"],
 ["Q","Quem tem um porquê para viver suporta quase qualquer como.","Friedrich Nietzsche","Crepúsculo dos Ídolos, Máximas e Flechas, 12"],
-["Q","Falhei repetidas vezes na minha vida. E é por isso que eu tenho sucesso.","Michael Jordan","Comercial “Failure”, Nike (1997)"]
+["Q","Falhei repetidas vezes na minha vida. E é por isso que eu tenho sucesso.","Michael Jordan","Comercial “Failure”, Nike (1997)"],
+/* Gratidão: oportunidades e vida */
+["A","Agradecer pelas oportunidades de hoje é o primeiro passo para merecer as de amanhã."],
+["A","Cada porta que se abriu para você teve alguém, ou algum esforço, por trás. Lembre e agradeça."],
+["A","Quem agradece enxerga mais portas abertas do que fechadas."],
+["A","Gratidão não nega as dificuldades; mostra o que ainda está de pé apesar delas."],
+["A","Acordar mais um dia já é uma oportunidade que muita gente gostaria de ter."],
+["A","Agradeça o trabalho que você tem: ele sustenta sonhos, ensina e conecta pessoas."],
+["A","Todo aprendizado difícil foi uma oportunidade disfarçada de problema."],
+["A","“Obrigado” é a menor frase com o maior efeito em qualquer relação."],
+["A","Reconheça quem abriu caminho antes de você: ninguém chega longe sozinho."],
+["A","Ser grato pela vida que você tem não impede de lutar pela vida que você quer."],
+["A","Os dias comuns, sem grandes notícias, também são presentes."],
+["A","Agradecer a quem te ensinou é devolver ao mundo a coragem de ensinar."],
+["A","Uma oportunidade recebida com gratidão rende mais do que uma conquistada com pressa."],
+["A","Pare um minuto e conte o que deu certo esta semana. A lista costuma ser maior do que parece."],
+["A","Gratidão é a memória do coração: ela lembra do bem que recebeu."],
+["A","Saúde, amigos, um teto e a chance de recomeçar: quanta riqueza cabe num dia comum."],
+["A","Agradeça até pelo que não deu certo: foi isso que redirecionou seus passos."],
+["A","A vida não promete facilidade; promete oportunidades de crescer. Aproveite cada uma."],
+["A","Cada pessoa que cruzou seu caminho deixou algo. Agradeça o que ficou."],
+["A","Quem valoriza o hoje constrói um amanhã com mais motivos para sorrir."],
+["A","Seja grato ao seu eu do passado, que continuou tentando quando era difícil."],
+["A","Reconheça o esforço dos outros e também o seu: os dois merecem gratidão."],
+["A","A chance de recomeçar é um dos maiores presentes da vida."],
+["A","Gratidão pelo hoje, confiança no amanhã, coragem para o próximo passo."],
+["A","Uma oportunidade só vira conquista quando alguém tem coragem de aproveitá-la, e gratidão para reconhecê-la."],
+["A","Respire fundo: você já superou todos os dias difíceis que viveu até aqui. Agradeça a sua força."],
+/* reforço das demais categorias */
+["T","Quem trata cada projeto como oportunidade de aprender nunca fica sem o que ensinar."],
+["T","Pequenas melhorias diárias no trabalho viram grandes diferenciais em poucos meses."],
+["T","Dizer “não sei, mas vou descobrir” é sinal de confiança, não de fraqueza."],
+["T","A reunião mais produtiva começa com um objetivo claro e termina com próximos passos definidos."],
+["T","Ouvir o cliente com atenção é a pesquisa de mercado mais barata que existe."],
+["P","Dormir bem, comer bem e se mover: a base da sua evolução cabe numa rotina simples."],
+["P","Quem se perdoa rápido aprende rápido."],
+["P","Não espere a motivação chegar; crie a rotina que a convida."],
+["P","Terminar o dia com um pequeno ganho já faz dele um dia vencido."],
+["M","Pensar bem não é pensar muito: é pensar com clareza e agir."],
+["M","Um erro entendido vale mais que dez acertos por sorte."],
+["M","Mude o ambiente, mude o ponto de vista: às vezes a solução está a uma caminhada de distância."],
+["M","Questione suas certezas com carinho: elas também precisam crescer."],
+["G","Reconhecimento sincero custa pouco e vale muito."],
+["G","Divergir com respeito também é uma forma de colaborar."],
+["G","Seja o colega que você gostaria de ter."],
+["G","Compartilhar o crédito multiplica a confiança."]
 ];
 
 /* Micro-desafios de 5 minutos (ligados ao tema da frase) */
@@ -549,11 +594,20 @@ G:[
 ["Passo de reconciliação","Reconheça um erro ou peça desculpas por algo pendente."],
 ["Conexão que ajuda","Apresente duas pessoas que poderiam se ajudar."]]
 };
+MICRO.A=[
+["Carta de gratidão","Escreva 3 linhas agradecendo a alguém que abriu uma porta para você."],
+["Agradeça agora","Envie um “obrigado” específico a quem te ajudou nesta semana."],
+["Lista de oportunidades","Anote 5 oportunidades que você recebeu na vida e que hoje fazem diferença."],
+["Gratidão ao passado","Escreva uma frase de agradecimento ao seu eu de um ano atrás."],
+["Três coisas simples","Registre 3 coisas simples de hoje pelas quais você é grato."],
+["Agradeça o trabalho","Anote 3 coisas que o seu trabalho te proporciona além do salário."],
+["Caminhada de gratidão","Caminhe 5 minutos agradecendo, em pensamento, por cada coisa que vê."],
+["Reconhecimento público","Elogie ou agradeça alguém na frente da equipe ou em um grupo."]];
 MICRO.Q=[MICRO.M[0],MICRO.M[1],MICRO.P[1],MICRO.P[7],MICRO.T[0],MICRO.T[4],MICRO.G[0],MICRO.G[3]];
 
 /* Perguntas de reflexão da noite */
 const REFL=[
-"O que aprendi hoje que eu não sabia ontem?","Qual foi minha maior vitória de hoje, mesmo pequena?","Onde posso melhorar amanhã, com gentileza comigo mesmo?","Quem me ajudou hoje e como posso agradecer?","Fiz algo hoje que me aproximou de quem eu quero ser?","O que tirou meu foco hoje e como posso evitar amanhã?","Que emoção mais senti hoje e o que ela quis me dizer?","Qual foi a decisão mais difícil de hoje e o que ela me ensinou?","Ajudei alguém hoje? Como foi?","Pelo que sou grato neste dia?","O que eu faria diferente se vivesse este dia de novo?","Qual é a única coisa mais importante para amanhã?","Cuidei do meu corpo e da minha energia hoje?","Que feedback recebi ou dei hoje e o que ele diz sobre meu crescimento?"
+"O que aprendi hoje que eu não sabia ontem?","Qual foi minha maior vitória de hoje, mesmo pequena?","Onde posso melhorar amanhã, com gentileza comigo mesmo?","Quem me ajudou hoje e como posso agradecer?","Fiz algo hoje que me aproximou de quem eu quero ser?","O que tirou meu foco hoje e como posso evitar amanhã?","Que emoção mais senti hoje e o que ela quis me dizer?","Qual foi a decisão mais difícil de hoje e o que ela me ensinou?","Ajudei alguém hoje? Como foi?","Pelo que sou grato neste dia?","O que eu faria diferente se vivesse este dia de novo?","Qual é a única coisa mais importante para amanhã?","Cuidei do meu corpo e da minha energia hoje?","Que feedback recebi ou dei hoje e o que ele diz sobre meu crescimento?","Pelo que posso agradecer hoje, mesmo diante das dificuldades?","Que oportunidade apareceu hoje e como posso aproveitá-la melhor?","A quem devo um agradecimento que ainda não fiz?","Qual pequena alegria deste dia eu quero lembrar?"
 ];
 
 /* embaralhamento fixo: todo mundo vê a mesma frase no mesmo dia */
