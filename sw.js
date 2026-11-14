@@ -1,4 +1,4 @@
-const CACHE = "norte-v2";
+const CACHE = "norte-v3";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); });
 self.addEventListener("activate", e => e.waitUntil(

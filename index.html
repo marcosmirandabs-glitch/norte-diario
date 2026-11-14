@@ -67,6 +67,10 @@ button[hidden]{display:none!important}
 @keyframes pop{50%{transform:scale(1.015)}}
 
 /* modo manhã/noite */
+.styles{display:flex;gap:8px;padding:12px 18px 0;overflow-x:auto;scrollbar-width:none}
+.sty{flex:none;padding:6px 12px;border-radius:99px;background:var(--chip);font-size:.76rem;font-weight:600;color:var(--muted)}
+.sty.on{background:var(--accent2);color:#3b2308}
+body.pst .quote{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .seg{display:flex;gap:6px;padding:14px 18px 0}
 .seg button{flex:1;height:38px;border-radius:12px;background:var(--chip);font-size:.85rem;font-weight:700;color:var(--muted)}
 .seg button.on{background:var(--accent);color:var(--onacc)}
@@ -257,6 +261,7 @@ dialog h3{margin:0 0 12px}
     <div class="hero" id="hero" role="button" tabindex="0" aria-label="Toque na ilustração para uma frase surpresa">
       <div id="scene"></div><span class="tag" id="tag">Foco</span><span class="surp">🎲 toque: frase surpresa</span>
     </div>
+    <div class="styles" id="styles" aria-label="Estilo da imagem"></div>
     <div class="seg" role="tablist" aria-label="Momento do dia">
       <button id="modeM" role="tab">☀️ Manhã · frase</button>
       <button id="modeN" role="tab">🌙 Noite · reflexão</button>
@@ -552,7 +557,57 @@ const RAW=[
 ["G","Reconhecimento sincero custa pouco e vale muito."],
 ["G","Divergir com respeito também é uma forma de colaborar."],
 ["G","Seja o colega que você gostaria de ter."],
-["G","Compartilhar o crédito multiplica a confiança."]
+["G","Compartilhar o crédito multiplica a confiança."],
+["A","Hoje você acordou com fôlego, com chances e com alguém que torce por você. Isso já é muita coisa."],
+["A","Existem pessoas que dariam tudo por um dia comum como o seu. Viva-o com os olhos de quem sabe disso."],
+["A","Obrigado, vida, por cada queda que me ensinou a levantar mais forte."],
+["A","Quando o dia termina, a pergunta mais bonita é: pelo que eu posso agradecer hoje?"],
+["A","Foi a sua coragem de ontem que abriu as portas de hoje. Agradeça a ela e siga em frente."],
+["A","Um abraço, um café quente, uma boa notícia: a vida costuma chegar em coisas pequenas."],
+["A","Nem tudo foi como você planejou, e mesmo assim você chegou aqui. Isso merece um obrigado."],
+["A","Gratidão transforma o que temos em suficiente, e o suficiente em abundância."],
+["A","Agradeça a cada pessoa que acreditou em você antes de você mesmo acreditar."],
+["A","O seu lugar de hoje foi construído por milhares de pequenos sim que a vida lhe deu. Reconheça cada um."],
+["A","Obrigado por mais um amanhecer. Ele chegou sem pedir nada em troca."],
+["A","Quem aprende a agradecer no pouco descobre que a vida sempre foi generosa."],
+["A","Há dias em que o maior presente é simplesmente seguir. Agradeça a sua persistência."],
+["A","Você passou por dias que pensou que não aguentaria. Aguentou. Agradeça a essa força."],
+["A","A vida é curta demais para guardar um obrigado. Diga hoje a quem merece."],
+["A","A gratidão faz o coração caber no mundo inteiro."],
+["A","Feche os olhos, lembre de três pessoas que te fizeram bem e deixe o coração agradecer."],
+["A","Cada oportunidade que você tem hoje já foi o sonho de alguém ontem."],
+["A","Obrigado ao tempo, que cura o que a pressa não consegue."],
+["A","Seja grato mesmo quando o dia não foi perfeito: ele ainda lhe deu algo a aprender."],
+["P","Você não precisa ter tudo resolvido para merecer ser feliz hoje."],
+["P","Um dia você vai olhar para trás e agradecer por não ter desistido. Esse dia começa agora."],
+["P","As melhores fases da vida costumam começar com um medo enorme e uma decisão pequena."],
+["P","Seja gentil consigo: você está fazendo o melhor que pode com o que já viveu."],
+["P","Nem toda despedida é uma perda. Algumas são o espaço que a vida abre para algo melhor."],
+["P","Cuidar de si não é egoísmo: é o que sustenta tudo que você faz pelos outros."],
+["P","Você é a prova viva de que é possível recomeçar depois de cair."],
+["P","A vida só acontece no hoje. Faça dele um dia do qual você sinta orgulho."],
+["P","O que hoje dói vai virar história de superação que você contará com um sorriso."],
+["P","Ame com a coragem de quem sabe que o tempo não volta."],
+["M","Sua mente é o jardim da sua vida: o que você rega com pensamentos é o que floresce."],
+["M","Respire. O que você sente agora é passageiro; a sua força é permanente."],
+["M","Você não é o seu pior dia. Você é tudo que decidiu continuar sendo depois dele."],
+["M","A paz não vem de ter tudo sob controle, mas de confiar na sua capacidade de lidar com o que vier."],
+["M","Fale com você como falaria com alguém que ama. Suas palavras internas moldam o seu mundo."],
+["M","Não existe vitória pequena para quem estava quase desistindo. Comemore."],
+["M","O medo grita, mas a coragem sussurra: “tente mais uma vez”. Escute a coragem."],
+["M","Depois da tempestade, a terra respira mais fundo. Dê a si mesmo o mesmo tempo."],
+["G","As pessoas que realmente importam não esperam que você seja perfeito, apenas presente."],
+["G","Um abraço sincero cura o que muitas palavras não alcançam."],
+["G","Seja a pessoa que você precisou encontrar em algum momento da vida."],
+["G","O que você faz pelos outros hoje volta, às vezes de formas que você nem imagina."],
+["G","Gente que acredita em você é um dos maiores presentes que a vida entrega. Cuide dela."],
+["G","Fale “eu estou com você”. Essas palavras já salvaram mais vidas do que se imagina."],
+["T","Ninguém começa sabendo. Quem se tornou referência um dia também foi o iniciante inseguro."],
+["T","Sua carreira é uma história em andamento: cada dia de esforço escreve uma página que ninguém consegue apagar."],
+["T","Trabalhe com o coração de quem sabe que um dia vai agradecer por cada esforço de hoje."],
+["T","Não desanime com o tamanho da escada: quem sobe degrau por degrau sempre chega ao topo."],
+["T","O reconhecimento pode demorar, mas a evolução de quem se dedica nunca passa despercebida."],
+["T","Um dia você vai olhar para este trabalho e perceber que ele te transformou na pessoa que sonhou ser."]
 ];
 
 /* Micro-desafios de 5 minutos (ligados ao tema da frase) */
@@ -790,8 +845,104 @@ function renderTop(){
   $("#date").textContent=today.toLocaleDateString("pt-BR",{day:"numeric",month:"long",year:"numeric"});
   $("#cityName").textContent=place.name;
 }
+/* ---------- estilos de imagem: paisagem + pôsteres tipográficos ---------- */
+const STYLES=[["mix","🎨 Mix"],["scene","🏞️ Paisagem"],["aurora","🌌 Aurora"],["sunset","🌇 Pôr do sol"],["paper","📝 Papel"],["neon","💡 Neon"],["geo","🔷 Formas"],["rays","☀️ Raios"],["bokeh","✨ Bokeh"]];
+const MIX=["scene","aurora","sunset","paper","scene","neon","geo","rays","scene","bokeh"];
+let imgStyle=store.get("nd_style","mix");if(!STYLES.some(s=>s[0]===imgStyle))imgStyle="mix";
+let curStyle="scene";
+const _mc=document.createElement("canvas").getContext("2d");
+function phash(s){let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return()=>{h=Math.imul(h^(h>>>15),2246822507);h^=h>>>13;return(h>>>0)/4294967296}}
+function fitText(text,w,h,font,minS,maxS,k){
+  let s=maxS,lines=[];
+  for(;s>=minS;s--){_mc.font=font(s);lines=wrap(_mc,text,w);if(lines.length*s*k<=h)break}
+  return {s,lines};
+}
+function posterSVG(st,W,H,it,card){
+  const R=phash(it.text+st),E=esc,cx=W/2;
+  const P={aurora:{ink:"#fff",acc:"#7ee8d8",ser:0},sunset:{ink:"#fff",acc:"#ffe3a3",ser:1},paper:{ink:"#3b2f2a",acc:"#c8643c",ser:1},
+    neon:{ink:"#fff",acc:"#5ef2ff",ser:0},geo:{ink:"#16303a",acc:"#2f6b7a",ser:0},rays:{ink:"#4a2c0a",acc:"#b8601a",ser:1},bokeh:{ink:"#fff",acc:"#ffc9a0",ser:1}}[st];
+  const FS="'Segoe UI',system-ui,-apple-system,sans-serif",FG="Georgia,'Times New Roman',serif",fam=P.ser?FG:FS;
+  const font=s=>`${P.ser?"italic ":""}700 ${s}px ${P.ser?"Georgia,'Times New Roman',serif":"'Segoe UI',system-ui,sans-serif"}`;
+  let top=card?175:H*.19,bot=card?H-150:H*.85,tw=W*(st==="geo"?.7:.8);
+  if(st==="sunset")bot=card?H*.64:H*.68;
+  const citeH=it.cite?(card?30:22):0;
+  const maxS=card?31:25,f=fitText(it.text,tw,bot-top-citeH,font,11,maxS,1.34),lh=f.s*1.34;
+  const blockH=f.lines.length*lh,cy=(top+bot-citeH)/2,y0=cy-blockH/2;
+  const ink=P.ink,acc=P.acc;
+  let bg="",fx="";
+  if(st==="aurora"){
+    bg=`<defs><linearGradient id="psa${st}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1b3a"/><stop offset=".55" stop-color="#14506b"/><stop offset="1" stop-color="#3b2a6e"/></linearGradient><filter id="psb${st}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="${W*.09}"/></filter></defs>
+    <rect width="${W}" height="${H}" fill="url(#psa${st})"/><g filter="url(#psb${st})"><ellipse cx="${W*.2}" cy="${H*.25}" rx="${W*.38}" ry="${H*.14}" fill="#2dd4bf" opacity=".6"/><ellipse cx="${W*.85}" cy="${H*.62}" rx="${W*.4}" ry="${H*.16}" fill="#a78bfa" opacity=".55"/><ellipse cx="${W*.4}" cy="${H*.98}" rx="${W*.5}" ry="${H*.12}" fill="#f4a261" opacity=".4"/></g>`;
+    for(let i=0;i<(card?34:22);i++)bg+=`<circle cx="${(R()*W).toFixed(1)}" cy="${(R()*H*.8).toFixed(1)}" r="${(.5+R()*1.2).toFixed(2)}" fill="#fff" opacity="${(.25+R()*.6).toFixed(2)}"/>`;
+  }else if(st==="sunset"){
+    const sy=H*(card?.8:.8),sr=W*(card?.26:.2);
+    bg=`<defs><linearGradient id="psa${st}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a6e"/><stop offset=".45" stop-color="#d4577c"/><stop offset=".78" stop-color="#ff9a5a"/><stop offset="1" stop-color="#ffd08a"/></linearGradient></defs>
+    <rect width="${W}" height="${H}" fill="url(#psa${st})"/>
+    <circle cx="${cx}" cy="${sy}" r="${sr*2.1}" fill="#ffe3a3" opacity=".14"/><circle cx="${cx}" cy="${sy}" r="${sr*1.5}" fill="#ffe3a3" opacity=".2"/><circle cx="${cx}" cy="${sy}" r="${sr}" fill="#fff0c4"/>
+    <rect x="0" y="${sy}" width="${W}" height="${H-sy}" fill="#2b2160"/>`;
+    for(let i=0;i<6;i++){const w=sr*(1.7-i*.22);bg+=`<rect x="${cx-w/2}" y="${sy+4+i*(H-sy)/7}" width="${w}" height="${Math.max(1.5,(H-sy)/22)}" rx="2" fill="#ffd9a0" opacity="${(.7-i*.1).toFixed(2)}"/>`}
+  }else if(st==="paper"){
+    bg=`<rect width="${W}" height="${H}" fill="#f7efe0"/>`;
+    for(let y=34;y<H;y+=card?30:24)bg+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#d9c9a8" stroke-width=".7" opacity=".7"/>`;
+    bg+=`<line x1="${W*.1}" y1="0" x2="${W*.1}" y2="${H}" stroke="#e29a86" stroke-width="1" opacity=".6"/>
+    <rect x="${cx-36}" y="${-8}" width="72" height="24" rx="2" transform="rotate(-4 ${cx} 4)" fill="#f4a261" opacity=".75"/>
+    <g transform="translate(${W-52} ${H-(card?170:58)}) rotate(-20)" fill="#6a9c78"><path d="M0 0C-8-16-2-34 14-40C16-22 10-8 0 0Z"/><path d="M4-4C16-14 30-14 40-8C30 2 14 4 4-4Z" opacity=".85"/><path d="M0 0L2 22" stroke="#4f7d5c" stroke-width="2" fill="none"/></g>`;
+  }else if(st==="neon"){
+    bg=`<defs><linearGradient id="psa${st}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07071a"/><stop offset="1" stop-color="#26093e"/></linearGradient><filter id="psg${st}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <rect width="${W}" height="${H}" fill="url(#psa${st})"/>`;
+    const gy=H*.8;for(let i=0;i<6;i++){const y=gy+(H-gy)*(i/5)**1.6;bg+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#ff4fd8" stroke-width=".8" opacity=".5"/>`}
+    for(let i=-6;i<=6;i++)bg+=`<line x1="${cx+i*W*.04}" y1="${gy}" x2="${cx+i*W*.2}" y2="${H}" stroke="#ff4fd8" stroke-width=".8" opacity=".4"/>`;
+    bg+=`<circle cx="${cx}" cy="${gy}" r="${W*.11}" fill="none" stroke="#5ef2ff" stroke-width="1.6" opacity=".8" filter="url(#psg${st})"/>
+    <rect x="${W*.06}" y="${H*.05}" width="${W*.88}" height="${H*.9}" rx="14" fill="none" stroke="#5ef2ff" stroke-width="1.2" opacity=".55" filter="url(#psg${st})"/>`;
+    fx=`filter="url(#psg${st})"`;
+  }else if(st==="geo"){
+    bg=`<rect width="${W}" height="${H}" fill="#fdf3e3"/>
+    <circle cx="${W*.9}" cy="${H*.1}" r="${W*.3}" fill="#f4a261"/><circle cx="${W*.08}" cy="${H*.95}" r="${W*.34}" fill="#2f6b7a"/>
+    <circle cx="${W*.18}" cy="${H*.1}" r="${W*.07}" fill="#e76f51"/><path d="M${W*.62} ${H} A${W*.24} ${W*.24} 0 0 1 ${W*1.1} ${H}Z" fill="#8ab9a6"/>
+    <circle cx="${W*.7}" cy="${H*.92}" r="${W*.03}" fill="#16303a"/>`;
+    const rh=blockH+citeH+(card?60:36);
+    bg+=`<rect x="${W*.08}" y="${cy-blockH/2-(card?30:18)}" width="${W*.84}" height="${rh}" rx="${card?28:18}" fill="#fffaf0" stroke="#16303a" stroke-width="${card?2:1.5}"/>`;
+  }else if(st==="rays"){
+    const ox=cx,oy=-H*.05;
+    bg=`<defs><linearGradient id="psa${st}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#ffc66b"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#psa${st})"/>`;
+    const n=16,len=H*1.6;for(let i=0;i<n;i++){const a1=Math.PI*(.1+.8*i/n),a2=Math.PI*(.1+.8*(i+.5)/n);
+      bg+=`<path d="M${ox} ${oy}L${(ox+len*Math.cos(a1)).toFixed(1)} ${(oy+len*Math.sin(a1)).toFixed(1)}L${(ox+len*Math.cos(a2)).toFixed(1)} ${(oy+len*Math.sin(a2)).toFixed(1)}Z" fill="#fff" opacity=".3"/>`}
+    bg+=`<circle cx="${ox}" cy="${oy}" r="${W*.2}" fill="#fff6d6" opacity=".95"/><circle cx="${ox}" cy="${oy}" r="${W*.3}" fill="#fff6d6" opacity=".3"/>`;
+  }else{ /* bokeh */
+    bg=`<defs><linearGradient id="psa${st}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c1030"/><stop offset=".6" stop-color="#5b2a6e"/><stop offset="1" stop-color="#e8735a"/></linearGradient><filter id="psb${st}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${W*.006}"/></filter></defs>
+    <rect width="${W}" height="${H}" fill="url(#psa${st})"/><g filter="url(#psb${st})">`;
+    const cols=["#ffffff","#ffc9a0","#ff8fa3","#ffe08a","#b9a2ff"];
+    for(let i=0;i<(card?26:20);i++)bg+=`<circle cx="${(R()*W).toFixed(1)}" cy="${(R()*H).toFixed(1)}" r="${(W*(.03+R()*.09)).toFixed(1)}" fill="${cols[i%5]}" opacity="${(.1+R()*.28).toFixed(2)}"/>`;
+    bg+=`</g>`;
+  }
+  let out=bg;
+  const stroke=(st==="sunset"||st==="bokeh"||st==="aurora")?` stroke="rgba(0,0,0,.18)" stroke-width="${card?3:2}" paint-order="stroke"`:"";
+  /* aspas */
+  out+=`<text x="${cx}" y="${y0-f.s*.1}" text-anchor="middle" font-family="${FG}" font-size="${f.s*2.6}" fill="${acc}" opacity=".55">“</text>`;
+  /* texto */
+  let ty=y0+f.s*.95;
+  f.lines.forEach(l=>{out+=`<text x="${cx}" y="${ty.toFixed(1)}" text-anchor="middle" font-family="${fam}" font-size="${f.s}" font-weight="700" ${P.ser?'font-style="italic"':""} fill="${ink}"${stroke} ${fx}>${E(l)}</text>`;ty+=lh});
+  if(it.cite)out+=`<text x="${cx}" y="${(ty+f.s*.2).toFixed(1)}" text-anchor="middle" font-family="${FS}" font-size="${card?15:11}" font-weight="600" fill="${acc}">${E(it.cite)}</text>`;
+  /* marca (só no cartão) */
+  if(card){
+    out+=`<text x="${cx}" y="62" text-anchor="middle" font-family="${FS}" font-size="13" font-weight="700" letter-spacing="5" fill="${acc}">NORTE DIÁRIO</text>
+    <text x="${cx}" y="84" text-anchor="middle" font-family="${FS}" font-size="11" fill="${ink}" opacity=".7">${E(today.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"}))}</text>
+    <text x="${cx}" y="${H-52}" text-anchor="middle" font-family="${FS}" font-size="11" fill="${ink}" opacity=".7">Um passo de cada vez ✦ rumo à sua evolução</text>`;
+  }
+  return out;
+}
+function pickStyle(p){
+  if(imgStyle!=="mix")return imgStyle;
+  if(mode==="n"||!p||p.c==="G")return "scene";
+  return MIX[mod(p.id*5+p.t.length,MIX.length)];
+}
+function renderStyles(){
+  $("#styles").innerHTML=STYLES.map(([k,v])=>`<button class="sty ${imgStyle===k?"on":""}" data-s="${k}">${v}</button>`).join("");
+}
 function renderScene(){
   const it=shown(), p=it.id!=null?PHRASES.find(x=>x.id===it.id):null;
+  curStyle=pickStyle(p);document.body.classList.toggle("pst",curStyle!=="scene");
+  if(curStyle!=="scene"){$("#scene").innerHTML=`<svg viewBox="0 0 400 240" style="aspect-ratio:400/240" role="img" aria-label="Pôster motivacional">${posterSVG(curStyle,400,240,it,false)}</svg>`;return}
   if(mode==="n")curScene="lakeNight";
   else if(p&&p.c==="G")curScene=p.id%2?"hug":"wave";
   else curScene=NATURE[(p.id*3+p.t.length)%NATURE.length];
@@ -992,7 +1143,7 @@ $("#gdSave").onclick=()=>{
   $("#goalsCard").scrollIntoView({behavior:"smooth",block:"center"});
 };
 
-const renderAll=()=>{renderPhrase();renderCal();renderChips();renderFavs();renderNotes();renderGoal()};
+const renderAll=()=>{renderPhrase();renderCal();renderChips();renderStyles();renderFavs();renderNotes();renderGoal()};
 
 /* =====================  EVENTOS  ===================== */
 function goDay(delta){flush();sel.setDate(sel.getDate()+delta);offset=0;view=new Date(sel.getFullYear(),sel.getMonth(),1);renderAll()}
@@ -1011,6 +1162,7 @@ const surprise=()=>{
   do{o=Math.floor(Math.random()*n)}while(n>1&&o===mod(offset,n));
   offset=o;renderPhrase(true);toast(mode==="n"?"🎲 Pergunta surpresa!":"🎲 Frase surpresa!");
 };
+$("#styles").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;imgStyle=b.dataset.s;store.set("nd_style",imgStyle);renderStyles();renderScene();if(imgStyle!=="mix")toast("Estilo: "+b.textContent.replace(/^\S+\s/,""))};
 $("#hero").onclick=surprise;
 $("#hero").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();surprise()}};
 $("#fav").onclick=()=>{const id=shown().id;if(id==null)return;favs=favs.includes(id)?favs.filter(x=>x!==id):[...favs,id];store.set("nd_favs",favs);renderPhrase();renderFavs()};
@@ -1032,7 +1184,15 @@ function wrap(ctx,text,maxW){
 }
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 async function makeCard(){
-  const it=shown(),svg=$("#scene svg").cloneNode(true);
+  const it=shown();
+  if(curStyle!=="scene"){
+    const s=`<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 360 640">${posterSVG(curStyle,360,640,it,true)}</svg>`;
+    const url=URL.createObjectURL(new Blob([s],{type:"image/svg+xml"}));
+    const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});
+    const cv=document.createElement("canvas");cv.width=1080;cv.height=1920;cv.getContext("2d").drawImage(img,0,0,1080,1920);
+    URL.revokeObjectURL(url);return new Promise(res=>cv.toBlob(res,"image/png"));
+  }
+  const svg=$("#scene svg").cloneNode(true);
   svg.setAttribute("xmlns","http://www.w3.org/2000/svg");svg.setAttribute("width","960");svg.setAttribute("height","528");
   const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:"image/svg+xml"}));
   const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});
